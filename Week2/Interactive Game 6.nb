@@ -1,0 +1,1635 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     74278,       1627]
+NotebookOptionsPosition[     73227,       1600]
+NotebookOutlinePosition[     73656,       1617]
+CellTagsIndexPosition[     73613,       1614]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Functions", "Section",
+ CellChangeTimes->{{3.840266429896079*^9, 
+  3.840266447409586*^9}},ExpressionUUID->"1e99d70d-c7eb-4c5b-8132-\
+1c7455cff987"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"collapseStep", "[", "forest_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"tempfo", "=", "forest"}], "}"}], ",", 
+    RowBox[{
+     RowBox[{"Scan", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Do", "[", 
+         RowBox[{
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{"Length", "[", 
+               RowBox[{
+               "tempfo", "\[LeftDoubleBracket]", "i", 
+                "\[RightDoubleBracket]"}], "]"}], "\[Equal]", "2"}], "&&", 
+             RowBox[{"MemberQ", "[", 
+              RowBox[{
+               RowBox[{
+               "tempfo", "\[LeftDoubleBracket]", "i", 
+                "\[RightDoubleBracket]"}], ",", "#1"}], "]"}]}], ",", 
+            RowBox[{
+             RowBox[{
+             "tempfo", "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}],
+              "=", 
+             RowBox[{
+              RowBox[{"Complement", "[", 
+               RowBox[{
+                RowBox[{
+                "tempfo", "\[LeftDoubleBracket]", "i", 
+                 "\[RightDoubleBracket]"}], ",", 
+                RowBox[{"{", "#1", "}"}]}], "]"}], "\[LeftDoubleBracket]", 
+              "1", "\[RightDoubleBracket]"}]}]}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", 
+            RowBox[{"Length", "[", "tempfo", "]"}]}], "}"}]}], "]"}], "&"}], 
+       ",", 
+       RowBox[{"Cases", "[", 
+        RowBox[{"tempfo", ",", "_Integer"}], "]"}]}], "]"}], ";", 
+     "tempfo"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.840261934163618*^9, 
+  3.8402619347217655`*^9}},ExpressionUUID->"dacbf97f-1d88-4c22-ad2c-\
+1d24a9dc6ce4"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"collapse", "[", "forest_", "]"}], ":=", 
+  RowBox[{"FixedPoint", "[", 
+   RowBox[{"collapseStep", ",", "forest"}], "]"}]}]], "Input",ExpressionUUID->\
+"2ab92396-ae19-441a-a4fe-3dfbb5cdc379"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"collapse", "[", 
+   RowBox[{"forest_", ",", "index_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"tempfo", "=", "forest"}], "}"}], ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"tempfo", "\[LeftDoubleBracket]", 
+       RowBox[{"-", "1"}], "\[RightDoubleBracket]"}], "=", 
+      RowBox[{"tempfo", "\[LeftDoubleBracket]", 
+       RowBox[{
+        RowBox[{"-", "1"}], ",", "index"}], "\[RightDoubleBracket]"}]}], ";", 
+     RowBox[{"collapse", "[", "tempfo", "]"}]}]}], "]"}]}]], "Input",Expressio\
+nUUID->"0cb9a90d-95e4-4148-b027-5e9d5b75210c"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Game", "Section",
+ CellChangeTimes->{{3.8151235692855844`*^9, 
+  3.8151235697245054`*^9}},ExpressionUUID->"8858afb3-a843-45a6-8d2f-\
+2d08260278ec"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DynamicModule", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"spookies", "=", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{
+        RowBox[{"{", "}"}], ",", "9"}], "]"}]}], ",", 
+     RowBox[{"classicals", "=", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{"0", ",", "9"}], "]"}]}], ",", 
+     RowBox[{"state1Classicals", "=", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{"0", ",", "9"}], "]"}]}], ",", 
+     RowBox[{"state2Classicals", "=", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{"0", ",", "9"}], "]"}]}], ",", 
+     RowBox[{"tempClassicals", "=", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"forest", "=", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"ancestors", "=", 
+      RowBox[{"Range", "[", "9", "]"}]}], ",", 
+     RowBox[{"roots", "=", 
+      RowBox[{"Range", "[", "9", "]"}]}], ",", 
+     RowBox[{"player", "=", "1"}], ",", 
+     RowBox[{"selected", "=", "0"}], ",", 
+     RowBox[{"turn", "=", "1"}], ",", 
+     RowBox[{"gameover", "=", "False"}], ",", 
+     RowBox[{"state1Indexes", "=", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"state2Indexes", "=", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"wins", "=", 
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"Range", "[", 
+           RowBox[{"r", ",", 
+            RowBox[{"r", "+", "2"}]}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"r", ",", "1", ",", "7", ",", "3"}], "}"}]}], "]"}], ",", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"Range", "[", 
+           RowBox[{"r", ",", 
+            RowBox[{"r", "+", "6"}], ",", "3"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"r", ",", "1", ",", "3"}], "}"}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"1", ",", "5", ",", "9"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"3", ",", "5", ",", "7"}], "}"}]}], "}"}]}], "]"}]}], ",", 
+     RowBox[{"winText", "=", "\"\<\>\""}], ",", 
+     RowBox[{"announceColor", "=", "White"}], ",", 
+     RowBox[{"message", "=", "\"\<\>\""}], ",", 
+     RowBox[{"firstIndex", "=", 
+      RowBox[{"-", "1"}]}], ",", 
+     RowBox[{"cycle", "=", "False"}], ",", 
+     RowBox[{"state1Text", "=", "\"\<State 1\>\""}], ",", 
+     RowBox[{"state2Text", "=", "\"\<State 2\>\""}], ",", 
+     RowBox[{"showText", "=", "\"\<Show\>\""}], ",", 
+     RowBox[{"chooseText", "=", "\"\<Choose\>\""}], ",", 
+     RowBox[{"spookiesOpacity", "=", "0.5"}], ",", 
+     RowBox[{"player1Wins", "=", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"player2Wins", "=", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"player1WinScores", "=", 
+      RowBox[{"{", "}"}]}], ",", "player2WinScores", ",", 
+     RowBox[{"dialogColor", "=", "White"}], ",", 
+     RowBox[{"show1Color", "=", "White"}], ",", 
+     RowBox[{"show2Color", "=", "White"}]}], "}"}], ",", 
+   RowBox[{"ClickPane", "[", 
+    RowBox[{
+     RowBox[{"Dynamic", "[", 
+      RowBox[{"Graphics", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"Black", ",", 
+          RowBox[{"AbsoluteThickness", "[", "15", "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1.45", ",", "0.5"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1.55", ",", "3.5"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"2.45", ",", "0.5"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"2.55", ",", "3.5"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"0.5", ",", "1.5"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"3.5", ",", "1.5"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"0.5", ",", "2.5"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"3.5", ",", "2.5"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Directive", "[", 
+           RowBox[{"FontSize", "\[Rule]", "30"}], "]"}], ",", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{"player", "\[Equal]", "1"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Blue", ",", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"FontSize", "\[Rule]", "150"}], ",", 
+                RowBox[{"FontFamily", "\[Rule]", "\"\<Comic Sans MS\>\""}]}], 
+               "]"}], ",", 
+              RowBox[{"Text", "[", 
+               RowBox[{"\"\<O\>\"", ",", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "4"}], "}"}]}], "]"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Red", ",", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"FontSize", "\[Rule]", "150"}], ",", 
+                RowBox[{"FontFamily", "\[Rule]", "\"\<Comic Sans MS\>\""}]}], 
+               "]"}], ",", 
+              RowBox[{"Text", "[", 
+               RowBox[{"\"\<X\>\"", ",", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "4"}], "}"}]}], "]"}]}], "}"}]}], "]"}], 
+          ",", "announceColor", ",", 
+          RowBox[{"Text", "[", 
+           RowBox[{"winText", ",", 
+            RowBox[{"{", 
+             RowBox[{"2", ",", "5"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "1"}], ",", "0"}], "}"}]}], "]"}], ",", "Black", 
+          ",", "Thick", ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1.5", ",", "3.7"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"3.5", ",", "3.7"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"3.5", ",", "4.3"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1.5", ",", "4.3"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1.5", ",", "3.7"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Text", "[", 
+           RowBox[{"\"\<New Game\>\"", ",", 
+            RowBox[{"{", 
+             RowBox[{"2.5", ",", "4"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Directive", "[", 
+           RowBox[{"FontFamily", "\[Rule]", "\"\<Arial\>\""}], "]"}], ",", 
+          RowBox[{"Directive", "[", 
+           RowBox[{"FontSize", "->", "30"}], "]"}], ",", 
+          RowBox[{"Text", "[", 
+           RowBox[{"message", ",", 
+            RowBox[{"{", 
+             RowBox[{"5.2", ",", "4"}], "}"}]}], "]"}], ",", 
+          RowBox[{"MapIndexed", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Directive", "[", 
+                RowBox[{
+                 RowBox[{"FontSize", "->", "20"}], ",", 
+                 RowBox[{"FontFamily", "->", "\"\<Comic Sans MS\>\""}]}], 
+                "]"}], ",", 
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{"OddQ", "[", "#1", "]"}], ",", "Blue", ",", "Red"}], 
+                "]"}], ",", 
+               RowBox[{"Opacity", "[", "spookiesOpacity", "]"}], ",", 
+               RowBox[{"Text", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{
+                   RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{"OddQ", "[", "#1", "]"}], ",", "\"\<O\>\"", ",", 
+                    "\"\<X\>\""}], "]"}], ",", 
+                   RowBox[{"ToString", "[", "#1", "]"}]}], "]"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"#2", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "+", 
+                    RowBox[{"0.3", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"Mod", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"#2", "[", 
+                    RowBox[{"[", "3", "]"}], "]"}], "-", "1"}], ",", "3"}], 
+                    "]"}], "-", "1"}], ")"}]}], "+", 
+                    RowBox[{"0.05", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"#2", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}], "-", "2"}], ")"}]}]}], 
+                   ",", 
+                   RowBox[{
+                    RowBox[{"#2", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}], "+", 
+                    RowBox[{"0.3", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"Quotient", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"#2", "[", 
+                    RowBox[{"[", "3", "]"}], "]"}], "-", "1"}], ",", "3"}], 
+                    "]"}], "-", "1"}], ")"}]}]}]}], "}"}]}], "]"}]}], "}"}], 
+             "&"}], ",", 
+            RowBox[{"Transpose", "[", 
+             RowBox[{"Reverse", "[", 
+              RowBox[{"Partition", "[", 
+               RowBox[{"spookies", ",", "3"}], "]"}], "]"}], "]"}], ",", 
+            RowBox[{"{", "3", "}"}]}], "]"}], ",", 
+          RowBox[{"MapIndexed", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Directive", "[", 
+                RowBox[{
+                 RowBox[{"FontSize", "->", "70"}], ",", 
+                 RowBox[{"FontFamily", "->", "\"\<Comic Sans MS\>\""}]}], 
+                "]"}], ",", 
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{"OddQ", "[", "#1", "]"}], ",", "Blue", ",", "Red"}], 
+                "]"}], ",", 
+               RowBox[{"Opacity", "[", "0.5", "]"}], ",", 
+               RowBox[{"Text", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{
+                   RowBox[{"Which", "[", 
+                    RowBox[{
+                    RowBox[{"#1", "==", "0"}], ",", "\"\<\>\"", ",", 
+                    RowBox[{"OddQ", "[", "#1", "]"}], ",", "\"\<O\>\"", ",", 
+                    "True", ",", "\"\<X\>\""}], "]"}], ",", 
+                   RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{"#1", ">", "0"}], ",", 
+                    RowBox[{"ToString", "[", "#1", "]"}], ",", "\"\<\>\""}], 
+                    "]"}]}], "]"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"#2", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "+", 
+                    RowBox[{"0.05", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"#2", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}], "-", "2"}], ")"}]}]}], 
+                   ",", 
+                   RowBox[{"#2", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}]}], "}"}]}], "]"}]}], "}"}],
+              "&"}], ",", 
+            RowBox[{"Transpose", "[", 
+             RowBox[{"Reverse", "[", 
+              RowBox[{"Partition", "[", 
+               RowBox[{"tempClassicals", ",", "3"}], "]"}], "]"}], "]"}], ",", 
+            RowBox[{"{", "2", "}"}]}], "]"}], ",", 
+          RowBox[{"MapIndexed", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Directive", "[", 
+                RowBox[{
+                 RowBox[{"FontSize", "->", "70"}], ",", 
+                 RowBox[{"FontFamily", "->", "\"\<Comic Sans MS\>\""}]}], 
+                "]"}], ",", 
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{"OddQ", "[", "#1", "]"}], ",", "Blue", ",", "Red"}], 
+                "]"}], ",", 
+               RowBox[{"Text", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{
+                   RowBox[{"Which", "[", 
+                    RowBox[{
+                    RowBox[{"#1", "==", "0"}], ",", "\"\<\>\"", ",", 
+                    RowBox[{"OddQ", "[", "#1", "]"}], ",", "\"\<O\>\"", ",", 
+                    "True", ",", "\"\<X\>\""}], "]"}], ",", 
+                   RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{"#1", ">", "0"}], ",", 
+                    RowBox[{"ToString", "[", "#1", "]"}], ",", "\"\<\>\""}], 
+                    "]"}]}], "]"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"#2", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "+", 
+                    RowBox[{"0.05", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"#2", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}], "-", "2"}], ")"}]}]}], 
+                   ",", 
+                   RowBox[{"#2", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}]}], "}"}]}], "]"}]}], "}"}],
+              "&"}], ",", 
+            RowBox[{"Transpose", "[", 
+             RowBox[{"Reverse", "[", 
+              RowBox[{"Partition", "[", 
+               RowBox[{"classicals", ",", "3"}], "]"}], "]"}], "]"}], ",", 
+            RowBox[{"{", "2", "}"}]}], "]"}], ",", 
+          RowBox[{"AbsoluteThickness", "[", "15", "]"}], ",", "Blue", ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"Map", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"1.1", 
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}]}], "-", 
+                 RowBox[{"0.1", 
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "2", "]"}], "]"}]}]}], ",", 
+                RowBox[{
+                 RowBox[{"1.1", 
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "2", "]"}], "]"}]}], "-", 
+                 RowBox[{"0.1", 
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}]}]}]}], "}"}], "&"}], ",", 
+             RowBox[{"Map", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"Mod", "[", 
+                    RowBox[{
+                    RowBox[{"#", "-", "1"}], ",", "3"}], "]"}], "+", "1", "+", 
+                   RowBox[{"0.05", 
+                    RowBox[{"(", 
+                    RowBox[{"1", "-", 
+                    RowBox[{"Quotient", "[", 
+                    RowBox[{
+                    RowBox[{"#", "-", "1"}], ",", "3"}], "]"}]}], ")"}]}]}], 
+                  ",", 
+                  RowBox[{"3", "-", 
+                   RowBox[{"Quotient", "[", 
+                    RowBox[{
+                    RowBox[{"#", "-", "1"}], ",", "3"}], "]"}]}]}], "}"}], 
+                "&"}], ",", 
+               RowBox[{"Map", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"First", "[", "#", "]"}], ",", 
+                    RowBox[{"Last", "[", "#", "]"}]}], "}"}], "&"}], ",", 
+                 "player1Wins"}], "]"}], ",", 
+               RowBox[{"{", "2", "}"}]}], "]"}]}], "]"}], "]"}], ",", "Red", 
+          ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"Map", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"1.1", 
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}]}], "-", 
+                 RowBox[{"0.1", 
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "2", "]"}], "]"}]}]}], ",", 
+                RowBox[{
+                 RowBox[{"1.1", 
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "2", "]"}], "]"}]}], "-", 
+                 RowBox[{"0.1", 
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}]}]}]}], "}"}], "&"}], ",", 
+             RowBox[{"Map", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{
+                   RowBox[{"Mod", "[", 
+                    RowBox[{
+                    RowBox[{"#", "-", "1"}], ",", "3"}], "]"}], "+", "1", "+", 
+                   RowBox[{"0.05", 
+                    RowBox[{"(", 
+                    RowBox[{"1", "-", 
+                    RowBox[{"Quotient", "[", 
+                    RowBox[{
+                    RowBox[{"#", "-", "1"}], ",", "3"}], "]"}]}], ")"}]}]}], 
+                  ",", 
+                  RowBox[{"3", "-", 
+                   RowBox[{"Quotient", "[", 
+                    RowBox[{
+                    RowBox[{"#", "-", "1"}], ",", "3"}], "]"}]}]}], "}"}], 
+                "&"}], ",", 
+               RowBox[{"Map", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"First", "[", "#", "]"}], ",", 
+                    RowBox[{"Last", "[", "#", "]"}]}], "}"}], "&"}], ",", 
+                 "player2Wins"}], "]"}], ",", 
+               RowBox[{"{", "2", "}"}]}], "]"}]}], "]"}], "]"}], ",", 
+          "show1Color", ",", 
+          RowBox[{"Polygon", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"4.6", ",", "1.75"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"4.6", ",", "2.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.4", ",", "2.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.4", ",", "1.75"}], "}"}]}], "}"}], "]"}], ",", 
+          "show2Color", ",", 
+          RowBox[{"Polygon", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"4.6", ",", "0.75"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"4.6", ",", "1.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.4", ",", "1.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.4", ",", "0.75"}], "}"}]}], "}"}], "]"}], ",", 
+          "dialogColor", ",", 
+          RowBox[{"Text", "[", 
+           RowBox[{"state1Text", ",", 
+            RowBox[{"{", 
+             RowBox[{"4", ",", "2"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Text", "[", 
+           RowBox[{"state2Text", ",", 
+            RowBox[{"{", 
+             RowBox[{"4", ",", "1"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Text", "[", 
+           RowBox[{"showText", ",", 
+            RowBox[{"{", 
+             RowBox[{"5", ",", "2"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Text", "[", 
+           RowBox[{"showText", ",", 
+            RowBox[{"{", 
+             RowBox[{"5", ",", "1"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Text", "[", 
+           RowBox[{"chooseText", ",", 
+            RowBox[{"{", 
+             RowBox[{"6", ",", "2"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Text", "[", 
+           RowBox[{"chooseText", ",", 
+            RowBox[{"{", 
+             RowBox[{"6", ",", "1"}], "}"}]}], "]"}], ",", 
+          RowBox[{"AbsoluteThickness", "[", "2", "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"4.6", ",", "1.75"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"4.6", ",", "2.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.4", ",", "2.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.4", ",", "1.75"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"4.6", ",", "1.75"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"4.6", ",", "0.75"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"4.6", ",", "1.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.4", ",", "1.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.4", ",", "0.75"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"4.6", ",", "0.75"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"5.6", ",", "1.75"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.6", ",", "2.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"6.4", ",", "2.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"6.4", ",", "1.75"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.6", ",", "1.75"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"5.6", ",", "0.75"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.6", ",", "1.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"6.4", ",", "1.25"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"6.4", ",", "0.75"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5.6", ",", "0.75"}], "}"}]}], "}"}], "]"}]}], "}"}], 
+        ",", 
+        RowBox[{"ImageSize", "\[Rule]", "1100"}], ",", 
+        RowBox[{"PlotRange", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0.4", ",", "7"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"0.4", ",", "4.6"}], "}"}]}], "}"}]}]}], "]"}], "]"}], 
+     ",", 
+     RowBox[{
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"x", "=", 
+           RowBox[{"Round", "[", 
+            RowBox[{
+             RowBox[{"#", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], "-", 
+             RowBox[{"0.05", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"#", "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], "-", "2"}], ")"}]}]}], 
+            "]"}]}], ",", 
+          RowBox[{"y", "=", 
+           RowBox[{"Round", "[", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "2", "]"}], "]"}], "]"}]}]}], "}"}], ",", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"y", "\[Equal]", "4"}], ",", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"spookies", "=", 
+             RowBox[{"ConstantArray", "[", 
+              RowBox[{
+               RowBox[{"{", "}"}], ",", "9"}], "]"}]}], ";", 
+            RowBox[{"classicals", "=", 
+             RowBox[{"ConstantArray", "[", 
+              RowBox[{"0", ",", "9"}], "]"}]}], ";", 
+            RowBox[{"state1Classicals", "=", 
+             RowBox[{"ConstantArray", "[", 
+              RowBox[{"0", ",", "9"}], "]"}]}], ";", 
+            RowBox[{"state2Classicals", "=", 
+             RowBox[{"ConstantArray", "[", 
+              RowBox[{"0", ",", "9"}], "]"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"tempClassicals", "=", 
+             RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"forest", "=", 
+             RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"ancestors", "=", 
+             RowBox[{"Range", "[", "9", "]"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"roots", "=", 
+             RowBox[{"Range", "[", "9", "]"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"player", "=", "1"}], ";", "\[IndentingNewLine]", 
+            RowBox[{"selected", "=", "0"}], ";", "\[IndentingNewLine]", 
+            RowBox[{"turn", "=", "1"}], ";", "\[IndentingNewLine]", 
+            RowBox[{"gameover", "=", "False"}], ";", "\[IndentingNewLine]", 
+            RowBox[{"state1Indexes", "=", 
+             RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"state2Indexes", "=", 
+             RowBox[{"{", "}"}]}], ";", 
+            RowBox[{"winText", "=", "\"\<\>\""}], ";", 
+            RowBox[{"announceColor", "=", "White"}], ";", 
+            RowBox[{"firstIndex", "=", 
+             RowBox[{"-", "1"}]}], ";", 
+            RowBox[{"cycle", "=", "False"}], ";", 
+            RowBox[{"message", "=", "\"\<\>\""}], ";", 
+            RowBox[{"spookiesOpacity", "=", "0.5"}], ";", 
+            RowBox[{"player1Wins", "=", 
+             RowBox[{"{", "}"}]}], ";", 
+            RowBox[{"player2Wins", "=", 
+             RowBox[{"{", "}"}]}], ";", 
+            RowBox[{"player1WinScores", "=", 
+             RowBox[{"{", "}"}]}], ";", 
+            RowBox[{"player2WinScores", "=", 
+             RowBox[{"{", "}"}]}], ";", 
+            RowBox[{"dialogColor", "=", "White"}], ";", 
+            RowBox[{"show1Color", "=", "White"}], ";", 
+            RowBox[{"show2Color", "=", "White"}], ";"}], ")"}], ",", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Not", "[", "gameover", "]"}], "&&", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"Not", "[", 
+                RowBox[{"firstIndex", "==", 
+                 RowBox[{"x", "+", 
+                  RowBox[{"3", 
+                   RowBox[{"(", 
+                    RowBox[{"3", "-", "y"}], ")"}]}]}]}], "]"}], "||", 
+               RowBox[{
+                RowBox[{"Count", "[", 
+                 RowBox[{"classicals", ",", "0"}], "]"}], "==", "1"}]}], 
+              ")"}]}], ",", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{"Not", "[", "cycle", "]"}], ",", 
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"(", 
+                  RowBox[{"1", "\[LessEqual]", "x", "\[LessEqual]", "3"}], 
+                  ")"}], "&&", 
+                 RowBox[{"(", 
+                  RowBox[{"1", "\[LessEqual]", "y", "\[LessEqual]", "3"}], 
+                  ")"}], "&&", 
+                 RowBox[{
+                  RowBox[{"classicals", "[", 
+                   RowBox[{"[", 
+                    RowBox[{"x", "+", 
+                    RowBox[{"3", 
+                    RowBox[{"(", 
+                    RowBox[{"3", "-", "y"}], ")"}]}]}], "]"}], "]"}], "==", 
+                  "0"}]}], ",", 
+                RowBox[{"With", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"index", "=", 
+                    RowBox[{"x", "+", 
+                    RowBox[{"3", 
+                    RowBox[{"(", 
+                    RowBox[{"3", "-", "y"}], ")"}]}]}]}], "}"}], ",", 
+                  RowBox[{"If", "[", 
+                   RowBox[{
+                    RowBox[{"selected", "==", "0"}], ",", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"spookies", "[", 
+                    RowBox[{"[", "index", "]"}], "]"}], "=", 
+                    RowBox[{"Append", "[", 
+                    RowBox[{
+                    RowBox[{"spookies", "[", 
+                    RowBox[{"[", "index", "]"}], "]"}], ",", "turn"}], 
+                    "]"}]}], ";", 
+                    RowBox[{"selected", "=", "1"}], ";", 
+                    RowBox[{"firstIndex", "=", "index"}]}], ")"}], ",", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"spookies", "[", 
+                    RowBox[{"[", "index", "]"}], "]"}], "=", 
+                    RowBox[{"Append", "[", 
+                    RowBox[{
+                    RowBox[{"spookies", "[", 
+                    RowBox[{"[", "index", "]"}], "]"}], ",", "turn"}], 
+                    "]"}]}], ";", 
+                    RowBox[{"turn", "=", 
+                    RowBox[{"turn", "+", "1"}]}], ";", 
+                    RowBox[{"selected", "=", "0"}], ";", 
+                    RowBox[{"player", "=", 
+                    RowBox[{"3", "-", "player"}]}], ";", 
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"roots", "[", 
+                    RowBox[{"[", "index", "]"}], "]"}], "==", 
+                    RowBox[{"roots", "[", 
+                    RowBox[{"[", "firstIndex", "]"}], "]"}]}], ",", 
+                    RowBox[{
+                    RowBox[{"cycle", "=", "True"}], ";", 
+                    RowBox[{
+                    "message", "=", 
+                    "\"\<Cyclic entanglement:\\nTime to force a \
+wavefunction\\ncollapse by measuring\>\""}], ";", 
+                    RowBox[{"dialogColor", "=", "Black"}], ";"}]}], "]"}], 
+                    ";", 
+                    RowBox[{"forest", "=", 
+                    RowBox[{"Append", "[", 
+                    RowBox[{"forest", ",", 
+                    RowBox[{"Sort", "[", 
+                    RowBox[{"{", 
+                    RowBox[{"index", ",", "firstIndex"}], "}"}], "]"}]}], 
+                    "]"}]}], ";", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"ancestors", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"roots", "[", 
+                    RowBox[{"[", "index", "]"}], "]"}], "]"}], "]"}], "=", 
+                    RowBox[{"Min", "[", 
+                    RowBox[{
+                    RowBox[{"roots", "[", 
+                    RowBox[{"[", "index", "]"}], "]"}], ",", 
+                    RowBox[{"roots", "[", 
+                    RowBox[{"[", "firstIndex", "]"}], "]"}]}], "]"}]}], ";", 
+                    "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"ancestors", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"roots", "[", 
+                    RowBox[{"[", "firstIndex", "]"}], "]"}], "]"}], "]"}], 
+                    "=", 
+                    RowBox[{"Min", "[", 
+                    RowBox[{
+                    RowBox[{"roots", "[", 
+                    RowBox[{"[", "index", "]"}], "]"}], ",", 
+                    RowBox[{"roots", "[", 
+                    RowBox[{"[", "firstIndex", "]"}], "]"}]}], "]"}]}], ";", 
+                    "\[IndentingNewLine]", 
+                    RowBox[{"roots", "=", 
+                    RowBox[{"FixedPoint", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"ancestors", "[", 
+                    RowBox[{"[", "#", "]"}], "]"}], "&"}], ",", "ancestors"}],
+                     "]"}]}], ";", 
+                    RowBox[{"If", "[", 
+                    RowBox[{"cycle", ",", 
+                    RowBox[{
+                    RowBox[{"state1Indexes", "=", 
+                    RowBox[{"collapse", "[", 
+                    RowBox[{"forest", ",", "1"}], "]"}]}], ";", 
+                    RowBox[{"state2Indexes", "=", 
+                    RowBox[{"collapse", "[", 
+                    RowBox[{"forest", ",", "2"}], "]"}]}], ";", 
+                    RowBox[{"Do", "[", 
+                    RowBox[{
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{"IntegerQ", "[", 
+                    RowBox[{"state1Indexes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+                    RowBox[{
+                    RowBox[{"state1Classicals", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"state1Indexes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}], "]"}], "]"}], "=", 
+                    "i"}]}], "]"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"i", ",", "1", ",", 
+                    RowBox[{"Length", "[", "state1Indexes", "]"}]}], "}"}]}], 
+                    "]"}], ";", 
+                    RowBox[{"Do", "[", 
+                    RowBox[{
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{"IntegerQ", "[", 
+                    RowBox[{"state2Indexes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}], "]"}], ",", 
+                    RowBox[{
+                    RowBox[{"state2Classicals", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"state2Indexes", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}], "]"}], "]"}], "=", 
+                    "i"}]}], "]"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"i", ",", "1", ",", 
+                    RowBox[{"Length", "[", "state2Indexes", "]"}]}], "}"}]}], 
+                    "]"}]}]}], "]"}], ";", 
+                    RowBox[{"firstIndex", "=", 
+                    RowBox[{"-", "1"}]}]}], ")"}]}], "]"}]}], "]"}]}], "]"}], 
+              ",", 
+              RowBox[{"Which", "[", 
+               RowBox[{
+                RowBox[{"x", "==", "5"}], ",", 
+                RowBox[{
+                 RowBox[{"Which", "[", 
+                  RowBox[{
+                   RowBox[{"y", "==", "2"}], ",", 
+                   RowBox[{
+                    RowBox[{"tempClassicals", "=", "state1Classicals"}], ";", 
+                    RowBox[{"show1Color", "=", "Gray"}], ";", 
+                    RowBox[{"show2Color", "=", "White"}]}], ",", 
+                   RowBox[{"y", "==", "1"}], ",", 
+                   RowBox[{
+                    RowBox[{"tempClassicals", "=", "state2Classicals"}], ";", 
+                    RowBox[{"show2Color", "=", "Gray"}], ";", 
+                    RowBox[{"show1Color", "=", "White"}]}]}], "]"}], ";", 
+                 RowBox[{"spookiesOpacity", "=", "0.2"}]}], ",", 
+                RowBox[{"x", "==", "6"}], ",", 
+                RowBox[{
+                 RowBox[{"Which", "[", 
+                  RowBox[{
+                   RowBox[{"y", "==", "2"}], ",", 
+                   RowBox[{"classicals", "=", 
+                    RowBox[{"classicals", "+", "state1Classicals"}]}], ",", 
+                   RowBox[{"y", "==", "1"}], ",", 
+                   RowBox[{"classicals", "=", 
+                    RowBox[{"classicals", "+", "state2Classicals"}]}]}], 
+                  "]"}], ";", 
+                 RowBox[{"tempClassicals", "=", 
+                  RowBox[{"ConstantArray", "[", 
+                   RowBox[{"0", ",", "9"}], "]"}]}], ";", 
+                 RowBox[{"state1Classicals", "=", 
+                  RowBox[{"ConstantArray", "[", 
+                   RowBox[{"0", ",", "9"}], "]"}]}], ";", 
+                 RowBox[{"state2Classicals", "=", 
+                  RowBox[{"ConstantArray", "[", 
+                   RowBox[{"0", ",", "9"}], "]"}]}], ";", 
+                 RowBox[{"cycle", "=", "False"}], ";", 
+                 RowBox[{"Do", "[", 
+                  RowBox[{
+                   RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"classicals", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}], ">", "0"}], ",", 
+                    RowBox[{
+                    RowBox[{"spookies", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}], "=", 
+                    RowBox[{"{", "}"}]}]}], "]"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{"i", ",", "1", ",", "9"}], "}"}]}], "]"}], ";", 
+                 RowBox[{"forest", "=", 
+                  RowBox[{"Cases", "[", 
+                   RowBox[{"forest", ",", "_List"}], "]"}]}], ";", 
+                 RowBox[{"spookiesOpacity", "=", "0.5"}], ";", 
+                 RowBox[{"dialogColor", "=", "White"}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"show1Color", "=", "White"}], ";", 
+                 RowBox[{"show2Color", "=", "White"}], ";", 
+                 RowBox[{"player1Wins", "=", 
+                  RowBox[{"Select", "[", 
+                   RowBox[{"wins", ",", 
+                    RowBox[{
+                    RowBox[{"SubsetQ", "[", 
+                    RowBox[{
+                    RowBox[{"Flatten", "[", 
+                    RowBox[{"Position", "[", 
+                    RowBox[{"classicals", ",", 
+                    RowBox[{"_", "?", "OddQ"}]}], "]"}], "]"}], ",", "#"}], 
+                    "]"}], "&"}]}], "]"}]}], ";", 
+                 RowBox[{"player2Wins", "=", 
+                  RowBox[{"Select", "[", 
+                   RowBox[{"wins", ",", 
+                    RowBox[{
+                    RowBox[{"SubsetQ", "[", 
+                    RowBox[{
+                    RowBox[{"Flatten", "[", 
+                    RowBox[{"Position", "[", 
+                    RowBox[{"classicals", ",", 
+                    RowBox[{"x_", "/;", 
+                    RowBox[{
+                    RowBox[{"EvenQ", "[", "x", "]"}], "&&", 
+                    RowBox[{"x", ">", "0"}]}]}]}], "]"}], "]"}], ",", "#"}], 
+                    "]"}], "&"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"Length", "[", 
+                    RowBox[{"Join", "[", 
+                    RowBox[{"player1Wins", ",", "player2Wins"}], "]"}], "]"}],
+                     ">", "0"}], "||", 
+                    RowBox[{
+                    RowBox[{"Count", "[", 
+                    RowBox[{"classicals", ",", "0"}], "]"}], "==", "0"}]}], 
+                   ",", 
+                   RowBox[{"gameover", "=", "True"}]}], "]"}], ";", 
+                 RowBox[{"player1WinScores", "=", 
+                  RowBox[{"Map", "[", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"Max", "[", 
+                    RowBox[{"classicals", "[", 
+                    RowBox[{"[", "#", "]"}], "]"}], "]"}], "&"}], ",", 
+                    "player1Wins"}], "]"}]}], ";", 
+                 RowBox[{"player2WinScores", "=", 
+                  RowBox[{"Map", "[", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"Max", "[", 
+                    RowBox[{"classicals", "[", 
+                    RowBox[{"[", "#", "]"}], "]"}], "]"}], "&"}], ",", 
+                    "player2Wins"}], "]"}]}], ";", 
+                 RowBox[{"Which", "[", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"Length", "[", "player1Wins", "]"}], "==", "2"}], 
+                   ",", 
+                   RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"player1WinScores", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "==", 
+                    RowBox[{"player1WinScores", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}]}], ",", 
+                    RowBox[{
+                    "message", "=", 
+                    "\"\<Two rows completed at same\\nclassical time: 2 \
+points for O\>\""}], ",", 
+                    RowBox[{
+                    "message", "=", 
+                    "\"\<Two rows completed at different\\nclassical times: \
+1.5 points for O\>\""}]}], "]"}], ",", 
+                   RowBox[{
+                    RowBox[{"Length", "[", "player2Wins", "]"}], "==", "2"}], 
+                   ",", 
+                   RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"player2WinScores", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "==", 
+                    RowBox[{"player2WinScores", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}]}], ",", 
+                    RowBox[{
+                    "message", "=", 
+                    "\"\<Two rows completed at same\\nclassical time: 2 \
+points for X\>\""}], ",", 
+                    RowBox[{
+                    "message", "=", 
+                    "\"\<Two rows completed at different\\nclassical times: \
+1.5 points for X\>\""}]}], "]"}], ",", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"Length", "[", "player1Wins", "]"}], "==", "1"}], 
+                    "&&", 
+                    RowBox[{
+                    RowBox[{"Length", "[", "player2Wins", "]"}], "==", 
+                    "1"}]}], ",", 
+                   RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"player1WinScores", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "<", 
+                    RowBox[{"player2WinScores", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}]}], ",", 
+                    RowBox[{
+                    "message", "=", 
+                    "\"\<O row completed at earlier\\nclassical time; 1 point \
+for O,\\n0.5 points for X\>\""}], ",", 
+                    RowBox[{
+                    "message", "=", 
+                    "\"\<X row completed at earlier\\nclassical time; 1 point \
+for X,\\n0.5 points for O\>\""}]}], "]"}], ",", 
+                   RowBox[{
+                    RowBox[{"Length", "[", "player1Wins", "]"}], "==", "1"}], 
+                   ",", 
+                   RowBox[{
+                   "message", "=", "\"\<Winning row:\\n1 point for O\>\""}], 
+                   ",", 
+                   RowBox[{
+                    RowBox[{"Length", "[", "player2Wins", "]"}], "==", "1"}], 
+                   ",", 
+                   RowBox[{
+                   "message", "=", "\"\<Winning row:\\n1 point for X\>\""}], 
+                   ",", 
+                   RowBox[{
+                    RowBox[{"Count", "[", 
+                    RowBox[{"classicals", ",", "0"}], "]"}], "==", "0"}], ",", 
+                   RowBox[{
+                   "message", "=", "\"\<No winning rows:\\ngame drawn\>\""}], 
+                   ",", "True", ",", 
+                   RowBox[{"message", "=", "\"\<\>\""}]}], "]"}]}]}], "]"}]}],
+              "]"}]}], "]"}]}], "]"}]}], "]"}], "&"}]}], "]"}], ",", 
+   RowBox[{"SaveDefinitions", "\[Rule]", "True"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.8152033479053087`*^9, 3.8152033523690014`*^9}, {
+   3.815203391710987*^9, 3.815203640436602*^9}, {3.815203673046132*^9, 
+   3.815203761851103*^9}, {3.8152037995459023`*^9, 3.8152043158145328`*^9}, {
+   3.8152044182735133`*^9, 3.8152044510331106`*^9}, {3.815204660108124*^9, 
+   3.815204698031904*^9}, {3.8152049098995066`*^9, 3.8152049263247337`*^9}, {
+   3.815204984323949*^9, 3.815204999724899*^9}, {3.8152050320456715`*^9, 
+   3.815205105721425*^9}, {3.8152051361878242`*^9, 3.8152052353712063`*^9}, {
+   3.81520529055175*^9, 3.8152053297345457`*^9}, {3.8152053624957733`*^9, 
+   3.815205458949879*^9}, {3.815205512308853*^9, 3.815205533046374*^9}, {
+   3.815205595526405*^9, 3.8152056095282717`*^9}, {3.815205649933626*^9, 
+   3.815205694431113*^9}, {3.8152057580144463`*^9, 3.815205759252656*^9}, {
+   3.815205983248868*^9, 3.815206016874257*^9}, {3.8152060469466333`*^9, 
+   3.8152062185134907`*^9}, {3.815206298172917*^9, 3.815206437788536*^9}, {
+   3.815206553346224*^9, 3.8152066501423826`*^9}, {3.815206706299653*^9, 
+   3.815206900132857*^9}, {3.8152069392932024`*^9, 3.8152069395783744`*^9}, {
+   3.815207012139616*^9, 3.815207299680957*^9}, {3.815207446548752*^9, 
+   3.8152074690729923`*^9}, {3.8152075664838915`*^9, 3.81520757022676*^9}, {
+   3.8401080260103555`*^9, 3.840108029676355*^9}, {3.8401080691976166`*^9, 
+   3.8401080971552286`*^9}, {3.840108206791045*^9, 3.8401082153925962`*^9}, {
+   3.8401351026768312`*^9, 3.8401351503912363`*^9}, {3.8401731922219896`*^9, 
+   3.8401732715459347`*^9}, {3.8401733243430567`*^9, 
+   3.8401733412358427`*^9}, {3.840173418816393*^9, 3.8401734636470184`*^9}, {
+   3.840173527547025*^9, 3.8401735434637403`*^9}, 3.840173581237308*^9, {
+   3.840173697222159*^9, 3.8401738056343923`*^9}, {3.8401738466011763`*^9, 
+   3.840173848142315*^9}, {3.8401738819346423`*^9, 3.8401739460773582`*^9}, {
+   3.8401739770476313`*^9, 3.840173984632168*^9}, {3.840174032877536*^9, 
+   3.840174126517766*^9}, {3.8401742187648044`*^9, 3.840174284241536*^9}, {
+   3.8401743311705008`*^9, 3.840174368948138*^9}, {3.840174476504854*^9, 
+   3.840174482421708*^9}, {3.8401745489082212`*^9, 3.840174601042573*^9}, {
+   3.840174632493764*^9, 3.8401746806035028`*^9}, {3.8401748191045012`*^9, 
+   3.840174863863947*^9}, {3.840174905379368*^9, 3.8401749952261724`*^9}, {
+   3.8401750293032703`*^9, 3.8401750402576437`*^9}, {3.840175078937431*^9, 
+   3.840175156327672*^9}, {3.840175267615574*^9, 3.8401752797291665`*^9}, {
+   3.8401754052730875`*^9, 3.8401755536196175`*^9}, {3.8401755922362766`*^9, 
+   3.840175615583314*^9}, {3.8401758842619133`*^9, 3.840175898529363*^9}, {
+   3.840175928896613*^9, 3.8401760091251097`*^9}, {3.840176054993074*^9, 
+   3.8401761149336367`*^9}, {3.8401761578679476`*^9, 3.840176163426557*^9}, {
+   3.840176205221834*^9, 3.840176216144993*^9}, {3.840176288197668*^9, 
+   3.8401763051627493`*^9}, {3.8401763596761026`*^9, 
+   3.8401763622977395`*^9}, {3.8401763999167633`*^9, 
+   3.8401764003055134`*^9}, {3.840176438764968*^9, 3.8401764967957554`*^9}, {
+   3.8401765461700335`*^9, 3.840176549198016*^9}, {3.8401765887633085`*^9, 
+   3.84017659487475*^9}, {3.840176651923225*^9, 3.840176658354827*^9}, {
+   3.8401771596533213`*^9, 3.8401772035757465`*^9}, {3.8401773225372205`*^9, 
+   3.8401773263193645`*^9}, {3.840177388898324*^9, 3.8401773974550667`*^9}, {
+   3.840177981130416*^9, 3.8401779968511324`*^9}, {3.840178189157687*^9, 
+   3.8401781893264694`*^9}, {3.8401782425185328`*^9, 3.840178269052183*^9}, {
+   3.840178370478786*^9, 3.840178370930271*^9}, {3.840179098750572*^9, 
+   3.840179602685192*^9}, {3.840179762926614*^9, 3.8401797871815104`*^9}, {
+   3.8401798300354853`*^9, 3.8401798984786053`*^9}, {3.8401799422928276`*^9, 
+   3.840179947768717*^9}, {3.840180001889903*^9, 3.8401800022283573`*^9}, {
+   3.8401800844896193`*^9, 3.840180091286598*^9}, {3.840180130695013*^9, 
+   3.8401801497472277`*^9}, {3.8401801992779*^9, 3.8401802541229725`*^9}, {
+   3.8401803376397705`*^9, 3.8401803445897923`*^9}, {3.8401803910731373`*^9, 
+   3.8401804842934833`*^9}, {3.840180528043087*^9, 3.840180530687331*^9}, {
+   3.8401805679356995`*^9, 3.840180568271397*^9}, {3.840180626272477*^9, 
+   3.840180872285289*^9}, {3.8401809294300723`*^9, 3.8401809297319336`*^9}, {
+   3.8401849344240932`*^9, 3.8401849457625275`*^9}, {3.8401849964088287`*^9, 
+   3.8401850002989225`*^9}, {3.840185170887718*^9, 3.840185175105917*^9}, {
+   3.840185536376856*^9, 3.84018563857234*^9}, {3.840185680667796*^9, 
+   3.8401857953921995`*^9}, {3.8401858546216807`*^9, 
+   3.8401859020834036`*^9}, {3.8401859330838547`*^9, 
+   3.8401859430971565`*^9}, {3.840186024107441*^9, 3.8401860246210475`*^9}, {
+   3.84018606950568*^9, 3.840186072546239*^9}, {3.840186114402446*^9, 
+   3.840186120019828*^9}, {3.8401861668519597`*^9, 3.840186182825852*^9}, {
+   3.8401862131196475`*^9, 3.8401862285552382`*^9}, {3.8401862605814686`*^9, 
+   3.840186290658484*^9}, {3.84018635635928*^9, 3.840186417350765*^9}, {
+   3.840186880440102*^9, 3.840186889702465*^9}, {3.84018798786829*^9, 
+   3.840188072841157*^9}, {3.840188516069409*^9, 3.8401885981539874`*^9}, {
+   3.840188655728152*^9, 3.8401886857172675`*^9}, {3.840188718997572*^9, 
+   3.8401888782155266`*^9}, {3.840188971562056*^9, 3.8401891839711494`*^9}, {
+   3.840189249556761*^9, 3.840189298277995*^9}, {3.840189345151211*^9, 
+   3.8401893589816284`*^9}, {3.840189401021665*^9, 3.840189469198987*^9}, {
+   3.8401895896413574`*^9, 3.8401896379592466`*^9}, {3.8401897048344574`*^9, 
+   3.8401897629393096`*^9}, {3.8401898209256697`*^9, 
+   3.8401898430698853`*^9}, {3.840189983168497*^9, 3.840189983651495*^9}, {
+   3.8401900958458786`*^9, 3.840190126098065*^9}, {3.8401902774745216`*^9, 
+   3.840190277944889*^9}, {3.840190309671262*^9, 3.8401903350363626`*^9}, {
+   3.840190395012113*^9, 3.8401903990360312`*^9}, {3.8401904921852813`*^9, 
+   3.840190512267809*^9}, {3.840190559639894*^9, 3.840190580756092*^9}, {
+   3.8401906250780497`*^9, 3.840190632999467*^9}, {3.8401906779629965`*^9, 
+   3.840190693194807*^9}, {3.840190728246436*^9, 3.840190729543448*^9}, {
+   3.8401909166742516`*^9, 3.84019093243978*^9}, {3.8401910277969074`*^9, 
+   3.8401910334158983`*^9}, {3.840191094790681*^9, 3.840191135988099*^9}, 
+   3.8401911922831964`*^9, {3.840191241372181*^9, 3.8401913715884666`*^9}, {
+   3.8401922265043592`*^9, 3.8401923028009014`*^9}, {3.8401925607142987`*^9, 
+   3.8401925753242793`*^9}, {3.8401926232009764`*^9, 3.8401926261326885`*^9}, 
+   3.84019266636191*^9, {3.840192757766862*^9, 3.8401927630388827`*^9}, {
+   3.840192795929761*^9, 3.8401928205296535`*^9}, 3.8401928882530265`*^9, 
+   3.8401929254087715`*^9, {3.8401929812765665`*^9, 3.8401930592155204`*^9}, {
+   3.840193184031273*^9, 3.8401931992183404`*^9}, {3.840193235584089*^9, 
+   3.8401932601766186`*^9}, {3.8401934475235205`*^9, 
+   3.8401934526298323`*^9}, {3.8402099574113836`*^9, 3.840210152664546*^9}, {
+   3.840210239459947*^9, 3.8402103015744963`*^9}, {3.840210412083645*^9, 
+   3.8402104392080855`*^9}, {3.840210470223979*^9, 3.8402104807758293`*^9}, {
+   3.8402105132004952`*^9, 3.840210522515316*^9}, {3.84021059180237*^9, 
+   3.84021059673499*^9}, {3.840210663293158*^9, 3.8402107380225244`*^9}, {
+   3.8402107771650496`*^9, 3.84021086708142*^9}, {3.840210959618949*^9, 
+   3.840210967703332*^9}, {3.8402110190394135`*^9, 3.8402110440420437`*^9}, {
+   3.8402111938662057`*^9, 3.84021119490032*^9}, {3.840211246780328*^9, 
+   3.8402113486065493`*^9}, {3.8402114653183904`*^9, 3.840211465610182*^9}, {
+   3.8402116475429287`*^9, 3.8402116478609314`*^9}, {3.840211742434947*^9, 
+   3.840211905309243*^9}, {3.84021194357905*^9, 3.8402119643915114`*^9}, {
+   3.8402120115705614`*^9, 3.840212066282344*^9}, {3.8402121000284696`*^9, 
+   3.8402122073129992`*^9}, {3.840212270936542*^9, 3.840212273949805*^9}, {
+   3.8402123292187243`*^9, 3.8402123321815367`*^9}, {3.840212425170263*^9, 
+   3.8402124752799673`*^9}, {3.8402125963219748`*^9, 
+   3.8402126044761376`*^9}, {3.840212756383829*^9, 3.8402129703304796`*^9}, {
+   3.840213035629222*^9, 3.840213051402768*^9}, {3.8402132049123945`*^9, 
+   3.8402132053935738`*^9}, {3.840213308362946*^9, 3.840213311834982*^9}, {
+   3.840254291541744*^9, 3.8402542920270324`*^9}, {3.8402543653815985`*^9, 
+   3.840254379183778*^9}, 3.840254412793312*^9, {3.8402547231525154`*^9, 
+   3.8402547626243124`*^9}, 3.840254908235664*^9, {3.8402554350743513`*^9, 
+   3.840255448356762*^9}, {3.8402554930826864`*^9, 3.840255500529714*^9}, {
+   3.8402555473131104`*^9, 3.84025563459548*^9}, {3.8402557222088976`*^9, 
+   3.840255726910554*^9}, {3.8402557578837767`*^9, 3.840255968165276*^9}, {
+   3.840256038105556*^9, 3.8402561075399404`*^9}, {3.840256197521817*^9, 
+   3.840256657073527*^9}, {3.8402568045023885`*^9, 3.840256934844711*^9}, {
+   3.8402569704828644`*^9, 3.8402570697439213`*^9}, {3.8402571285649395`*^9, 
+   3.84025741479375*^9}, {3.8402577899533234`*^9, 3.840257810666093*^9}, {
+   3.840257847159257*^9, 3.8402580217943316`*^9}, {3.840258080420235*^9, 
+   3.840258084972082*^9}, {3.8402581213618016`*^9, 3.8402581263085766`*^9}, {
+   3.8402581580361357`*^9, 3.840258282354431*^9}, {3.840258479097989*^9, 
+   3.8402585581843405`*^9}, {3.840258674942989*^9, 3.8402588665337763`*^9}, {
+   3.840261195357304*^9, 3.84026121747636*^9}, {3.840261728543247*^9, 
+   3.84026175139497*^9}, {3.840261848536916*^9, 3.840261849019389*^9}, {
+   3.8402622585249987`*^9, 3.840262269737039*^9}, {3.8402623401747737`*^9, 
+   3.8402623706095295`*^9}, {3.840263287880577*^9, 3.840263302107098*^9}, {
+   3.8402634608881516`*^9, 3.840263492097841*^9}, {3.8402635268342147`*^9, 
+   3.84026369052253*^9}, {3.8402637535708513`*^9, 3.8402637640335255`*^9}, {
+   3.8402638833192024`*^9, 3.8402639296805043`*^9}, 3.8402641074227257`*^9, {
+   3.8402641624684906`*^9, 3.8402641835692196`*^9}, {3.8402642212134023`*^9, 
+   3.84026425863756*^9}, {3.8402648005076094`*^9, 3.8402648258094206`*^9}, {
+   3.8402650135820704`*^9, 3.8402650194423466`*^9}, {3.840265167582532*^9, 
+   3.8402652702851605`*^9}, {3.840265325601657*^9, 3.8402653450156136`*^9}, {
+   3.840265375148447*^9, 3.8402655311209993`*^9}, {3.840265563851916*^9, 
+   3.8402655931510572`*^9}, {3.840265634403827*^9, 3.840265721125655*^9}, {
+   3.8402658015307093`*^9, 3.8402659869004936`*^9}, {3.8402660233756742`*^9, 
+   3.8402661739516897`*^9}, {3.84026731065879*^9, 3.8402675399752336`*^9}, {
+   3.840267679442802*^9, 3.840267763893764*^9}},
+ CellLabel->"In[9]:=",ExpressionUUID->"e5140ca9-69d0-49df-9153-7ea203b18415"],
+
+Cell[BoxData[
+ DynamicModuleBox[{$CellContext`spookies$$ = {{}, {}, {}, {}, {}, {}, {}, {}, \
+{}}, $CellContext`classicals$$ = {0, 0, 0, 0, 0, 0, 0, 0, 
+  0}, $CellContext`state1Classicals$$ = {0, 0, 0, 0, 0, 0, 0, 0, 
+  0}, $CellContext`state2Classicals$$ = {0, 0, 0, 0, 0, 0, 0, 0, 
+  0}, $CellContext`tempClassicals$$ = {}, $CellContext`forest$$ = {}, \
+$CellContext`ancestors$$ = {1, 2, 3, 4, 5, 6, 7, 8, 
+  9}, $CellContext`roots$$ = {1, 2, 3, 4, 5, 6, 7, 8, 
+  9}, $CellContext`player$$ = 1, $CellContext`selected$$ = 
+  0, $CellContext`turn$$ = 1, $CellContext`gameover$$ = 
+  False, $CellContext`state1Indexes$$ = {}, $CellContext`state2Indexes$$ = \
+{}, $CellContext`wins$$ = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 4, 7}, {2, 5, 
+  8}, {3, 6, 9}, {1, 5, 9}, {3, 5, 7}}, $CellContext`winText$$ = 
+  "", $CellContext`announceColor$$ = GrayLevel[1], $CellContext`message$$ = 
+  "", $CellContext`firstIndex$$ = -1, $CellContext`cycle$$ = 
+  False, $CellContext`state1Text$$ = "State 1", $CellContext`state2Text$$ = 
+  "State 2", $CellContext`showText$$ = "Show", $CellContext`chooseText$$ = 
+  "Choose", $CellContext`spookiesOpacity$$ = 
+  0.5, $CellContext`player1Wins$$ = {}, $CellContext`player2Wins$$ = {}, \
+$CellContext`player1WinScores$$ = {}, $CellContext`player2WinScores$$ = {}, \
+$CellContext`dialogColor$$ = GrayLevel[1], $CellContext`show1Color$$ = 
+  GrayLevel[1], $CellContext`show2Color$$ = GrayLevel[1]}, 
+  TagBox[
+   DynamicBox[ToBoxes[
+     Graphics[{Black, 
+       AbsoluteThickness[15], 
+       Line[{{1.45, 0.5}, {1.55, 3.5}}], 
+       Line[{{2.45, 0.5}, {2.55, 3.5}}], 
+       Line[{{0.5, 1.5}, {3.5, 1.5}}], 
+       Line[{{0.5, 2.5}, {3.5, 2.5}}], 
+       Directive[FontSize -> 30], 
+       If[$CellContext`player$$ == 1, {Blue, 
+         Directive[FontSize -> 150, FontFamily -> "Comic Sans MS"], 
+         Text["O", {1, 4}]}, {Red, 
+         Directive[FontSize -> 150, FontFamily -> "Comic Sans MS"], 
+         Text["X", {1, 4}]}], $CellContext`announceColor$$, 
+       Text[$CellContext`winText$$, {2, 5}, {-1, 0}], Black, Thick, 
+       Line[{{1.5, 3.7}, {3.5, 3.7}, {3.5, 4.3}, {1.5, 4.3}, {1.5, 3.7}}], 
+       Text["New Game", {2.5, 4}], 
+       Directive[FontFamily -> "Arial"], 
+       Directive[FontSize -> 30], 
+       Text[$CellContext`message$$, {5.2, 4}], 
+       MapIndexed[{
+         Directive[FontSize -> 20, FontFamily -> "Comic Sans MS"], 
+         If[
+          OddQ[#], Blue, Red], 
+         Opacity[$CellContext`spookiesOpacity$$], 
+         Text[
+          Subscript[
+           If[
+            OddQ[#], "O", "X"], 
+           ToString[#]], {
+          Part[#2, 1] + 0.3 (Mod[Part[#2, 3] - 1, 3] - 1) + 
+           0.05 (Part[#2, 2] - 2), Part[#2, 2] + 
+           0.3 (Quotient[Part[#2, 3] - 1, 3] - 1)}]}& , 
+        Transpose[
+         Reverse[
+          Partition[$CellContext`spookies$$, 3]]], {3}], 
+       MapIndexed[{
+         Directive[FontSize -> 70, FontFamily -> "Comic Sans MS"], 
+         If[
+          OddQ[#], Blue, Red], 
+         Opacity[0.5], 
+         Text[
+          Subscript[
+           Which[# == 0, "", 
+            OddQ[#], "O", True, "X"], 
+           If[# > 0, 
+            ToString[#], ""]], {Part[#2, 1] + 0.05 (Part[#2, 2] - 2), 
+           Part[#2, 2]}]}& , 
+        Transpose[
+         Reverse[
+          Partition[$CellContext`tempClassicals$$, 3]]], {2}], 
+       MapIndexed[{
+         Directive[FontSize -> 70, FontFamily -> "Comic Sans MS"], 
+         If[
+          OddQ[#], Blue, Red], 
+         Text[
+          Subscript[
+           Which[# == 0, "", 
+            OddQ[#], "O", True, "X"], 
+           If[# > 0, 
+            ToString[#], ""]], {Part[#2, 1] + 0.05 (Part[#2, 2] - 2), 
+           Part[#2, 2]}]}& , 
+        Transpose[
+         Reverse[
+          Partition[$CellContext`classicals$$, 3]]], {2}], 
+       AbsoluteThickness[15], Blue, 
+       Line[
+        Map[{
+         1.1 Part[#, 1] - 0.1 Part[#, 2], 1.1 Part[#, 2] - 0.1 Part[#, 1]}& , 
+         Map[{
+          Mod[# - 1, 3] + 1 + 0.05 (1 - Quotient[# - 1, 3]), 3 - 
+           Quotient[# - 1, 3]}& , 
+          Map[{
+            First[#], 
+            Last[#]}& , $CellContext`player1Wins$$], {2}]]], Red, 
+       Line[
+        Map[{
+         1.1 Part[#, 1] - 0.1 Part[#, 2], 1.1 Part[#, 2] - 0.1 Part[#, 1]}& , 
+         Map[{
+          Mod[# - 1, 3] + 1 + 0.05 (1 - Quotient[# - 1, 3]), 3 - 
+           Quotient[# - 1, 3]}& , 
+          Map[{
+            First[#], 
+            Last[#]}& , $CellContext`player2Wins$$], {
+          2}]]], $CellContext`show1Color$$, 
+       Polygon[{{4.6, 1.75}, {4.6, 2.25}, {5.4, 2.25}, {5.4, 
+        1.75}}], $CellContext`show2Color$$, 
+       Polygon[{{4.6, 0.75}, {4.6, 1.25}, {5.4, 1.25}, {5.4, 
+        0.75}}], $CellContext`dialogColor$$, 
+       Text[$CellContext`state1Text$$, {4, 2}], 
+       Text[$CellContext`state2Text$$, {4, 1}], 
+       Text[$CellContext`showText$$, {5, 2}], 
+       Text[$CellContext`showText$$, {5, 1}], 
+       Text[$CellContext`chooseText$$, {6, 2}], 
+       Text[$CellContext`chooseText$$, {6, 1}], 
+       AbsoluteThickness[2], 
+       Line[{{4.6, 1.75}, {4.6, 2.25}, {5.4, 2.25}, {5.4, 1.75}, {4.6, 
+        1.75}}], 
+       Line[{{4.6, 0.75}, {4.6, 1.25}, {5.4, 1.25}, {5.4, 0.75}, {4.6, 
+        0.75}}], 
+       Line[{{5.6, 1.75}, {5.6, 2.25}, {6.4, 2.25}, {6.4, 1.75}, {5.6, 
+        1.75}}], 
+       Line[{{5.6, 0.75}, {5.6, 1.25}, {6.4, 1.25}, {6.4, 0.75}, {5.6, 
+        0.75}}]}, ImageSize -> 1100, PlotRange -> {{0.4, 7}, {0.4, 4.6}}], 
+     StandardForm],
+    ImageSizeCache->{990., {313., 317.}}],
+   EventHandlerTag[{
+    "MouseClicked" :> (
+      Module[{$CellContext`x$ = 
+        Round[Part[#, 1] - 0.05 (Part[#, 2] - 2)], $CellContext`y$ = Round[
+          Part[#, 2]]}, 
+       If[$CellContext`y$ == 
+        4, $CellContext`spookies$$ = 
+         ConstantArray[{}, 9]; $CellContext`classicals$$ = 
+         ConstantArray[0, 9]; $CellContext`state1Classicals$$ = 
+         ConstantArray[0, 9]; $CellContext`state2Classicals$$ = 
+         ConstantArray[
+          0, 9]; $CellContext`tempClassicals$$ = {}; $CellContext`forest$$ = \
+{}; $CellContext`ancestors$$ = Range[9]; $CellContext`roots$$ = 
+         Range[9]; $CellContext`player$$ = 1; $CellContext`selected$$ = 
+         0; $CellContext`turn$$ = 1; $CellContext`gameover$$ = 
+         False; $CellContext`state1Indexes$$ = {}; \
+$CellContext`state2Indexes$$ = {}; $CellContext`winText$$ = 
+         ""; $CellContext`announceColor$$ = 
+         White; $CellContext`firstIndex$$ = -1; $CellContext`cycle$$ = 
+         False; $CellContext`message$$ = ""; $CellContext`spookiesOpacity$$ = 
+         0.5; $CellContext`player1Wins$$ = {}; $CellContext`player2Wins$$ = \
+{}; $CellContext`player1WinScores$$ = {}; $CellContext`player2WinScores$$ = \
+{}; $CellContext`dialogColor$$ = White; $CellContext`show1Color$$ = 
+         White; $CellContext`show2Color$$ = White; Null, 
+        If[
+         And[
+          Not[$CellContext`gameover$$], 
+          Or[
+           
+           Not[$CellContext`firstIndex$$ == $CellContext`x$ + 
+             3 (3 - $CellContext`y$)], Count[$CellContext`classicals$$, 0] == 
+           1]], 
+         If[
+          Not[$CellContext`cycle$$], 
+          If[
+           And[
+           1 <= $CellContext`x$ <= 3, 1 <= $CellContext`y$ <= 3, 
+            Part[$CellContext`classicals$$, $CellContext`x$ + 
+              3 (3 - $CellContext`y$)] == 0], 
+           
+           With[{$CellContext`index$ = $CellContext`x$ + 
+              3 (3 - $CellContext`y$)}, 
+            
+            If[$CellContext`selected$$ == 0, 
+             Part[$CellContext`spookies$$, $CellContext`index$] = Append[
+                
+                Part[$CellContext`spookies$$, $CellContext`index$], \
+$CellContext`turn$$]; $CellContext`selected$$ = 
+              1; $CellContext`firstIndex$$ = $CellContext`index$, 
+             Part[$CellContext`spookies$$, $CellContext`index$] = Append[
+                
+                Part[$CellContext`spookies$$, $CellContext`index$], \
+$CellContext`turn$$]; $CellContext`turn$$ = $CellContext`turn$$ + 
+               1; $CellContext`selected$$ = 0; $CellContext`player$$ = 
+              3 - $CellContext`player$$; 
+             If[Part[$CellContext`roots$$, $CellContext`index$] == 
+               Part[$CellContext`roots$$, $CellContext`firstIndex$$], \
+$CellContext`cycle$$ = True; $CellContext`message$$ = 
+                "Cyclic entanglement:\nTime to force a wavefunction\ncollapse \
+by measuring"; $CellContext`dialogColor$$ = Black; 
+               Null]; $CellContext`forest$$ = Append[$CellContext`forest$$, 
+                Sort[{$CellContext`index$, $CellContext`firstIndex$$}]]; 
+             Part[$CellContext`ancestors$$, 
+                Part[$CellContext`roots$$, $CellContext`index$]] = Min[
+                Part[$CellContext`roots$$, $CellContext`index$], 
+                Part[$CellContext`roots$$, $CellContext`firstIndex$$]]; 
+             Part[$CellContext`ancestors$$, 
+                Part[$CellContext`roots$$, $CellContext`firstIndex$$]] = Min[
+                Part[$CellContext`roots$$, $CellContext`index$], 
+                
+                Part[$CellContext`roots$$, $CellContext`firstIndex$$]]; \
+$CellContext`roots$$ = 
+              FixedPoint[
+               Part[$CellContext`ancestors$$, #]& , $CellContext`ancestors$$]; 
+             If[$CellContext`cycle$$, $CellContext`state1Indexes$$ = \
+$CellContext`collapse[$CellContext`forest$$, 
+                  1]; $CellContext`state2Indexes$$ = \
+$CellContext`collapse[$CellContext`forest$$, 2]; Do[
+                 If[
+                  IntegerQ[
+                   Part[$CellContext`state1Indexes$$, $CellContext`i]], 
+                  Part[$CellContext`state1Classicals$$, 
+                    
+                    Part[$CellContext`state1Indexes$$, $CellContext`i]] = \
+$CellContext`i], {$CellContext`i, 1, 
+                  Length[$CellContext`state1Indexes$$]}]; Do[
+                 If[
+                  IntegerQ[
+                   Part[$CellContext`state2Indexes$$, $CellContext`i]], 
+                  Part[$CellContext`state2Classicals$$, 
+                    
+                    Part[$CellContext`state2Indexes$$, $CellContext`i]] = \
+$CellContext`i], {$CellContext`i, 1, 
+                  
+                  Length[$CellContext`state2Indexes$$]}]]; \
+$CellContext`firstIndex$$ = -1]]], 
+          
+          Which[$CellContext`x$ == 5, 
+           Which[$CellContext`y$ == 
+             2, $CellContext`tempClassicals$$ = \
+$CellContext`state1Classicals$$; $CellContext`show1Color$$ = 
+              Gray; $CellContext`show2Color$$ = White, $CellContext`y$ == 
+             1, $CellContext`tempClassicals$$ = \
+$CellContext`state2Classicals$$; $CellContext`show2Color$$ = 
+              Gray; $CellContext`show1Color$$ = 
+              White]; $CellContext`spookiesOpacity$$ = 0.2, $CellContext`x$ == 
+           6, Which[$CellContext`y$ == 
+             2, $CellContext`classicals$$ = $CellContext`classicals$$ + \
+$CellContext`state1Classicals$$, $CellContext`y$ == 
+             1, $CellContext`classicals$$ = $CellContext`classicals$$ + \
+$CellContext`state2Classicals$$]; $CellContext`tempClassicals$$ = 
+            ConstantArray[0, 9]; $CellContext`state1Classicals$$ = 
+            ConstantArray[0, 9]; $CellContext`state2Classicals$$ = 
+            ConstantArray[0, 9]; $CellContext`cycle$$ = False; Do[
+             If[
+             Part[$CellContext`classicals$$, $CellContext`i] > 0, 
+              Part[$CellContext`spookies$$, $CellContext`i] = {}], \
+{$CellContext`i, 1, 9}]; $CellContext`forest$$ = Cases[$CellContext`forest$$, 
+              Blank[List]]; $CellContext`spookiesOpacity$$ = 
+            0.5; $CellContext`dialogColor$$ = 
+            White; $CellContext`show1Color$$ = 
+            White; $CellContext`show2Color$$ = 
+            White; $CellContext`player1Wins$$ = 
+            Select[$CellContext`wins$$, SubsetQ[
+               Flatten[
+                Position[$CellContext`classicals$$, 
+                 PatternTest[
+                  Blank[], OddQ]]], #]& ]; $CellContext`player2Wins$$ = 
+            Select[$CellContext`wins$$, SubsetQ[
+               Flatten[
+                Position[$CellContext`classicals$$, 
+                 Condition[
+                  Pattern[$CellContext`x, 
+                   Blank[]], 
+                  And[
+                   EvenQ[$CellContext`x], $CellContext`x > 0]]]], #]& ]; If[
+             Or[Length[
+                Join[$CellContext`player1Wins$$, $CellContext`player2Wins$$]] > 
+              0, Count[$CellContext`classicals$$, 0] == 
+              0], $CellContext`gameover$$ = 
+             True]; $CellContext`player1WinScores$$ = Map[Max[
+               
+               Part[$CellContext`classicals$$, #]]& , \
+$CellContext`player1Wins$$]; $CellContext`player2WinScores$$ = Map[Max[
+               
+               Part[$CellContext`classicals$$, #]]& , \
+$CellContext`player2Wins$$]; Which[Length[$CellContext`player1Wins$$] == 2, 
+             If[
+             Part[$CellContext`player1WinScores$$, 1] == 
+              Part[$CellContext`player1WinScores$$, 
+                2], $CellContext`message$$ = 
+              "Two rows completed at same\nclassical time: 2 points for O", \
+$CellContext`message$$ = 
+              "Two rows completed at different\nclassical times: 1.5 points \
+for O"], Length[$CellContext`player2Wins$$] == 2, 
+             If[
+             Part[$CellContext`player2WinScores$$, 1] == 
+              Part[$CellContext`player2WinScores$$, 
+                2], $CellContext`message$$ = 
+              "Two rows completed at same\nclassical time: 2 points for X", \
+$CellContext`message$$ = 
+              "Two rows completed at different\nclassical times: 1.5 points \
+for X"], 
+             And[
+             Length[$CellContext`player1Wins$$] == 1, 
+              Length[$CellContext`player2Wins$$] == 1], 
+             If[
+             Part[$CellContext`player1WinScores$$, 1] < 
+              Part[$CellContext`player2WinScores$$, 
+                1], $CellContext`message$$ = 
+              "O row completed at earlier\nclassical time; 1 point for O,\n\
+0.5 points for X", $CellContext`message$$ = 
+              "X row completed at earlier\nclassical time; 1 point for X,\n\
+0.5 points for O"], Length[$CellContext`player1Wins$$] == 
+             1, $CellContext`message$$ = "Winning row:\n1 point for O", 
+             Length[$CellContext`player2Wins$$] == 1, $CellContext`message$$ = 
+             "Winning row:\n1 point for X", 
+             Count[$CellContext`classicals$$, 0] == 0, $CellContext`message$$ = 
+             "No winning rows:\ngame drawn", True, $CellContext`message$$ = 
+             ""]]]]]]& )[
+       MousePosition["EventHandlerAutomatic"]], Method -> "Preemptive", 
+     PassEventsDown -> Automatic, PassEventsUp -> True}]],
+  DynamicModuleValues:>{},
+  Initialization:>{
+   Attributes[$CellContext`index$] = {Temporary}, $CellContext`collapse[
+      Pattern[$CellContext`forest, 
+       Blank[]]] := 
+    FixedPoint[$CellContext`collapseStep, $CellContext`forest], \
+$CellContext`collapse[
+      Pattern[$CellContext`forest, 
+       Blank[]], 
+      Pattern[$CellContext`index, 
+       Blank[]]] := 
+    Module[{$CellContext`tempfo = $CellContext`forest}, 
+      Part[$CellContext`tempfo, -1] = 
+       Part[$CellContext`tempfo, -1, $CellContext`index]; \
+$CellContext`collapse[$CellContext`tempfo]], $CellContext`collapseStep[
+      Pattern[$CellContext`forest, 
+       Blank[]]] := 
+    Module[{$CellContext`tempfo = $CellContext`forest}, Scan[Do[
+         If[
+          And[Length[
+             Part[$CellContext`tempfo, $CellContext`i]] == 2, 
+           MemberQ[
+            Part[$CellContext`tempfo, $CellContext`i], #]], 
+          Part[$CellContext`tempfo, $CellContext`i] = Part[
+            Complement[
+             Part[$CellContext`tempfo, $CellContext`i], {#}], 
+            1]], {$CellContext`i, 1, 
+          Length[$CellContext`tempfo]}]& , 
+        Cases[$CellContext`tempfo, 
+         Blank[Integer]]]; $CellContext`tempfo], $CellContext`tempfo = {{3, 
+      5}, {1, 2}, {7, 9}, {1, 5}, {5, 7}, 3}}]], "Output",
+ CellChangeTimes->{
+  3.84025596916669*^9, 3.840256053039482*^9, 3.8402561131139245`*^9, 
+   3.840256663962427*^9, 3.840257070560765*^9, 3.840257417730932*^9, 
+   3.8402579439926853`*^9, 3.8402579749158583`*^9, 3.8402580237011843`*^9, 
+   3.84025808637614*^9, 3.8402581277734594`*^9, 3.8402582888911123`*^9, {
+   3.840258550275996*^9, 3.8402585590531063`*^9}, 3.8402612184822416`*^9, 
+   3.840261757070757*^9, 3.8402618501787877`*^9, 3.840262270641553*^9, 
+   3.8402623717607694`*^9, 3.8402636993379908`*^9, 3.8402637672857165`*^9, 
+   3.8402639305780153`*^9, 3.8402641092377462`*^9, 3.8402641647453346`*^9, 
+   3.840264259264541*^9, 3.8402648265328207`*^9, 3.8402650202735357`*^9, 
+   3.8402651857390223`*^9, 3.840265277920554*^9, 3.8402653478053265`*^9, {
+   3.8402653949795103`*^9, 3.840265420698467*^9}, {3.8402654648504696`*^9, 
+   3.840265486387136*^9}, 3.8402655317533226`*^9, 3.8402655939330344`*^9, {
+   3.8402656440581436`*^9, 3.8402656855499306`*^9}, 3.8402657216957912`*^9, 
+   3.8402661015841665`*^9, 3.8402661767205367`*^9, {3.8402673306824465`*^9, 
+   3.840267416085704*^9}, 3.8402674712345314`*^9, 3.8402675050048833`*^9, 
+   3.840267540481596*^9, 3.8402677706150813`*^9},
+ CellLabel->"Out[9]=",ExpressionUUID->"85d86d3a-6b92-4353-9829-f41787c4bd00"]
+}, {2}]]
+}, Open  ]]
+},
+WindowSize->{1340, 831},
+WindowMargins->{{158, Automatic}, {Automatic, 52}},
+Magnification:>0.9 Inherited,
+FrontEndVersion->"12.3 for Microsoft Windows (64-bit) (May 11, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"dd1d2304-8886-45c7-a530-a88bbfa092f1"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 154, 3, 60, "Section",ExpressionUUID->"1e99d70d-c7eb-4c5b-8132-1c7455cff987"],
+Cell[737, 27, 1720, 47, 81, "Input",ExpressionUUID->"dacbf97f-1d88-4c22-ad2c-1d24a9dc6ce4"],
+Cell[2460, 76, 225, 5, 26, "Input",ExpressionUUID->"2ab92396-ae19-441a-a4fe-3dfbb5cdc379"],
+Cell[2688, 83, 620, 16, 26, "Input",ExpressionUUID->"0cb9a90d-95e4-4148-b027-5e9d5b75210c"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[3345, 104, 153, 3, 48, "Section",ExpressionUUID->"8858afb3-a843-45a6-8d2f-2d08260278ec"],
+Cell[CellGroupData[{
+Cell[3523, 111, 52273, 1125, 1845, "Input",ExpressionUUID->"e5140ca9-69d0-49df-9153-7ea203b18415"],
+Cell[55799, 1238, 17403, 358, 646, "Output",ExpressionUUID->"85d86d3a-6b92-4353-9829-f41787c4bd00"]
+}, {2}]]
+}, Open  ]]
+}
+]
+*)
+

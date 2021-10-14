@@ -1,0 +1,671 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     29425,        663]
+NotebookOptionsPosition[     28775,        643]
+NotebookOutlinePosition[     29175,        659]
+CellTagsIndexPosition[     29132,        656]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Game", "Section",
+ CellChangeTimes->{{3.8151235692855844`*^9, 
+  3.8151235697245054`*^9}},ExpressionUUID->"8858afb3-a843-45a6-8d2f-\
+2d08260278ec"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DynamicModule", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"universe", "=", 
+      RowBox[{"Tuples", "[", 
+       RowBox[{
+        RowBox[{"Range", "[", 
+         RowBox[{"1", ",", "3"}], "]"}], ",", 
+        RowBox[{"Range", "[", 
+         RowBox[{"1", ",", "3"}], "]"}]}], "]"}]}], ",", 
+     RowBox[{"noughts", "=", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"crosses", "=", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"player", "=", "1"}], ",", 
+     RowBox[{"gameover", "=", "False"}], ",", 
+     RowBox[{"wins", "=", 
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"Tuples", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", "x", "}"}], ",", 
+             RowBox[{"Range", "[", "3", "]"}]}], "}"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"x", ",", "1", ",", "3"}], "}"}]}], "]"}], ",", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"Tuples", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Range", "[", "3", "]"}], ",", 
+             RowBox[{"{", "y", "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"y", ",", "1", ",", "3"}], "}"}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"x", ",", "x"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"x", ",", "1", ",", "3"}], "}"}]}], "]"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"x", ",", 
+             RowBox[{"4", "-", "x"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"x", ",", "1", ",", "3"}], "}"}]}], "]"}], "}"}]}], 
+       "]"}]}], ",", 
+     RowBox[{"winText", "=", "\"\<\>\""}], ",", 
+     RowBox[{"announceColor", "=", "White"}]}], "}"}], ",", 
+   RowBox[{"ClickPane", "[", 
+    RowBox[{
+     RowBox[{"Dynamic", "[", 
+      RowBox[{"Graphics", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"Black", ",", 
+          RowBox[{"AbsoluteThickness", "[", "15", "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1.45", ",", "0.5"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1.55", ",", "3.5"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"2.45", ",", "0.5"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"2.55", ",", "3.5"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"0.5", ",", "1.5"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"3.5", ",", "1.5"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"0.5", ",", "2.5"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"3.5", ",", "2.5"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Directive", "[", 
+           RowBox[{"FontSize", "\[Rule]", "30"}], "]"}], ",", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{"player", "\[Equal]", "1"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Blue", ",", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"FontSize", "\[Rule]", "150"}], ",", 
+                RowBox[{"FontFamily", "\[Rule]", "\"\<Comic Sans MS\>\""}]}], 
+               "]"}], ",", 
+              RowBox[{"Text", "[", 
+               RowBox[{"\"\<O\>\"", ",", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "5"}], "}"}]}], "]"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Red", ",", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"FontSize", "\[Rule]", "150"}], ",", 
+                RowBox[{"FontFamily", "\[Rule]", "\"\<Comic Sans MS\>\""}]}], 
+               "]"}], ",", 
+              RowBox[{"Text", "[", 
+               RowBox[{"\"\<X\>\"", ",", 
+                RowBox[{"{", 
+                 RowBox[{"1", ",", "5"}], "}"}]}], "]"}]}], "}"}]}], "]"}], 
+          ",", "announceColor", ",", 
+          RowBox[{"Text", "[", 
+           RowBox[{"winText", ",", 
+            RowBox[{"{", 
+             RowBox[{"2", ",", "5"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "1"}], ",", "0"}], "}"}]}], "]"}], ",", "Black", 
+          ",", "Thick", ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "3.7"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"3", ",", "3.7"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"3", ",", "4.3"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "4.3"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "3.7"}], "}"}]}], "}"}], "]"}], ",", 
+          RowBox[{"Text", "[", 
+           RowBox[{"\"\<New Game\>\"", ",", 
+            RowBox[{"{", 
+             RowBox[{"2", ",", "4"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Directive", "[", 
+           RowBox[{
+            RowBox[{"FontSize", "\[Rule]", "150"}], ",", 
+            RowBox[{"FontFamily", "\[Rule]", "\"\<Comic Sans MS\>\""}]}], 
+           "]"}], ",", "Blue", ",", 
+          RowBox[{"Map", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Text", "[", 
+              RowBox[{"\"\<O\>\"", ",", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}], "+", 
+                  RowBox[{"0.05", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"#", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}], "-", "2"}], ")"}]}]}], 
+                 ",", 
+                 RowBox[{"#", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}]}], "}"}]}], "]"}], "&"}], 
+            ",", "noughts"}], "]"}], ",", "Red", ",", 
+          RowBox[{"Map", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Text", "[", 
+              RowBox[{"\"\<X\>\"", ",", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}], "+", 
+                  RowBox[{"0.05", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"#", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}], "-", "2"}], ")"}]}]}], 
+                 ",", 
+                 RowBox[{"#", "[", 
+                  RowBox[{"[", "2", "]"}], "]"}]}], "}"}]}], "]"}], "&"}], 
+            ",", "crosses"}], "]"}], ",", "announceColor", ",", 
+          RowBox[{"AbsoluteThickness", "[", "10", "]"}], ",", 
+          RowBox[{"If", "[", 
+           RowBox[{"gameover", ",", 
+            RowBox[{"Which", "[", 
+             RowBox[{
+              RowBox[{"TrueQ", "[", 
+               RowBox[{"announceColor", "\[Equal]", "Blue"}], "]"}], ",", 
+              RowBox[{"Line", "[", 
+               RowBox[{"Map", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"#", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "+", 
+                    RowBox[{"0.05", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"#", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}], "-", "2"}], ")"}]}]}], 
+                    ",", 
+                    RowBox[{"#", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}]}], "}"}], "&"}], ",", 
+                 RowBox[{"Select", "[", 
+                  RowBox[{"wins", ",", 
+                   RowBox[{
+                    RowBox[{"SubsetQ", "[", 
+                    RowBox[{"noughts", ",", "#"}], "]"}], "&"}]}], "]"}], ",", 
+                 RowBox[{"{", "2", "}"}]}], "]"}], "]"}], ",", 
+              RowBox[{"TrueQ", "[", 
+               RowBox[{"announceColor", "\[Equal]", "Red"}], "]"}], ",", 
+              RowBox[{"Line", "[", 
+               RowBox[{"Map", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"#", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "+", 
+                    RowBox[{"0.05", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"#", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}], "-", "2"}], ")"}]}]}], 
+                    ",", 
+                    RowBox[{"#", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}]}], "}"}], "&"}], ",", 
+                 RowBox[{"Select", "[", 
+                  RowBox[{"wins", ",", 
+                   RowBox[{
+                    RowBox[{"SubsetQ", "[", 
+                    RowBox[{"crosses", ",", "#"}], "]"}], "&"}]}], "]"}], ",", 
+                 RowBox[{"{", "2", "}"}]}], "]"}], "]"}], ",", "True", ",", 
+              RowBox[{"{", "}"}]}], "]"}]}], "]"}]}], "}"}], ",", 
+        RowBox[{"ImageSize", "\[Rule]", "500"}], ",", 
+        RowBox[{"PlotRange", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0.4", ",", "3.6"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"0.4", ",", "5.6"}], "}"}]}], "}"}]}]}], "]"}], "]"}], 
+     ",", 
+     RowBox[{
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"x", "=", 
+           RowBox[{"Round", "[", 
+            RowBox[{
+             RowBox[{"#", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], "-", 
+             RowBox[{"0.05", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"#", "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], "-", "2"}], ")"}]}]}], 
+            "]"}]}], ",", 
+          RowBox[{"y", "=", 
+           RowBox[{"Round", "[", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "2", "]"}], "]"}], "]"}]}]}], "}"}], ",", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"y", "\[Equal]", "4"}], ",", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"noughts", "=", 
+             RowBox[{"{", "}"}]}], ";", 
+            RowBox[{"crosses", "=", 
+             RowBox[{"{", "}"}]}], ";", 
+            RowBox[{"player", "=", "1"}], ";", 
+            RowBox[{"gameover", "=", "False"}], ";", 
+            RowBox[{"winText", "=", "\"\<\>\""}], ";", 
+            RowBox[{"announceColor", "=", "White"}]}], ")"}], ",", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Not", "[", "gameover", "]"}], "&&", 
+             RowBox[{"(", 
+              RowBox[{"1", "\[LessEqual]", "x", "\[LessEqual]", "3"}], ")"}], 
+             "&&", 
+             RowBox[{"(", 
+              RowBox[{"1", "\[LessEqual]", "y", "\[LessEqual]", "3"}], ")"}], 
+             "&&", 
+             RowBox[{"Not", "[", 
+              RowBox[{"MemberQ", "[", 
+               RowBox[{
+                RowBox[{"Union", "[", 
+                 RowBox[{"noughts", ",", "crosses"}], "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"x", ",", "y"}], "}"}]}], "]"}], "]"}]}], ",", 
+            RowBox[{
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{"player", "\[Equal]", "1"}], ",", 
+               RowBox[{"AppendTo", "[", 
+                RowBox[{"noughts", ",", 
+                 RowBox[{"{", 
+                  RowBox[{"x", ",", "y"}], "}"}]}], "]"}], ",", 
+               RowBox[{"AppendTo", "[", 
+                RowBox[{"crosses", ",", 
+                 RowBox[{"{", 
+                  RowBox[{"x", ",", "y"}], "}"}]}], "]"}]}], "]"}], ";", 
+             RowBox[{"Which", "[", 
+              RowBox[{
+               RowBox[{"AnyTrue", "[", 
+                RowBox[{"wins", ",", 
+                 RowBox[{
+                  RowBox[{"SubsetQ", "[", 
+                   RowBox[{"noughts", ",", "#"}], "]"}], "&"}]}], "]"}], ",", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"gameover", "=", "True"}], ";", 
+                 RowBox[{"announceColor", "=", "Blue"}], ";", 
+                 RowBox[{"winText", "=", "\"\<Noughts win!\>\""}]}], ")"}], 
+               ",", 
+               RowBox[{"AnyTrue", "[", 
+                RowBox[{"wins", ",", 
+                 RowBox[{
+                  RowBox[{"SubsetQ", "[", 
+                   RowBox[{"crosses", ",", "#"}], "]"}], "&"}]}], "]"}], ",", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"gameover", "=", "True"}], ";", 
+                 RowBox[{"announceColor", "=", "Red"}], ";", 
+                 RowBox[{"winText", "=", "\"\<Crosses win!\>\""}]}], ")"}], 
+               ",", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"Length", "[", "noughts", "]"}], "+", 
+                 RowBox[{"Length", "[", "crosses", "]"}]}], "\[Equal]", "9"}],
+                ",", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"gameover", "=", "True"}], ";", 
+                 RowBox[{"announceColor", "=", "Black"}], ";", 
+                 RowBox[{"winText", "=", "\"\<Game drawn\>\""}]}], ")"}], ",",
+                "True", ",", 
+               RowBox[{"player", "=", 
+                RowBox[{"1", "-", "player"}]}]}], "]"}]}]}], "]"}]}], "]"}]}],
+        "]"}], "&"}]}], "]"}]}], "]"}]], "Input",
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGCQBGIQ7fWjxulNzhvHO+e4nUF0xoFv7iB66Q/edBD9qlIx
+G0Tb2FiXgWiOio9VIHq5QNVuED3/gMcJEG3Hn3gGRB8obX4GomNYHV+D6EMn
+9rC+BdIWKafYQfSpWC5+EB1v9F0ARKuUMYqC6Fei5nIgegUTmxKIfvMgWw9E
+f1geaAqi0xrNrUB0wl1/OxCdmRrnBaIVHnEGguin1QuDQbT/jYJoED3ruUEs
+iHZ5YJsEoteePpsOoiPKDuSD6EOiL8D0rm/Pu8H2/5SeAKIved2bDKJb8gJW
+gujODtfNIHqD9c4jYPNEtC+D3dPnch9szjTPZyA61qHlH9icxEzmd0Cau6kI
+TO8pb+EB0WmnSg1AdEL/RScQ/SV0kSuI5qo5Hwii5zm6B4FoALsH3nc=
+  "],
+ CellLabel->
+  "In[202]:=",ExpressionUUID->"d010ee82-c27e-4321-9d05-f6d0ad5f84d4"],
+
+Cell[BoxData[
+ DynamicModuleBox[{$CellContext`universe$$ = CompressedData["
+1:eJxNVolh20AMc4Au0pU6QhfovN2mKQ4PYyWKJVHHI/Hw5+8/v37/+Hw+f/H5
+fH2fv08ffv9+7Qf6y/0LncBe/qKukHtEZ+i2H9cJinqhUBQU5dcoivrmVyqK
+CuBbUDf4/0uW8sEtC10Bm4JeB70i6ShKt5OaopSh01SGUIZJWVHKMOkrShm+
+rUAZQhlmW06P2yJ0Bex2lSGVYbauKGWYMihKybkkSoJaOOVRlF6aUilKAXzF
+1g3yPeueIYm1ovBe0R3A726Z/eFKrigo6pUfioKi3ArHcG1RFBX1GktFKcO0
+y2twrfPBtlEZ6hVtqXPi2qsoZehWK0N1uW33HjgIKEoZPjioy1CXCw3vmYOJ
+02MhowzV5cLHNeKgpChlYVjpKXW5EHNNObgpShk+cqjLUJcLQ/eAg6RLx8Iz
+iOOg6p5xsHVFWQhnBxycHcFBW1FU1CMHFaUMA3ljgoO/28pSIQdHC2OIo4ii
+lKHpogzVvFLHmONopChde5RScamCll7GKEc1Q46lXdLjKGhMc3RUlDI0NZWh
+Fi5NzQGOsopShk9gdIPvVIVGqxmqImCrAiGJlfFo9cMwoCJoRAMRuCAI6VY7
+BlSYXCE49wkN2t18ECJUIJCilfwoGkLsR2ZipH1E5eTHJOSkyAQjRqRHHk6i
+TAxOrgx6YuAGAuKUDkVnQPmASAxwD2Sc1BlAnOwZHMRA8BrPyaGbykmjG0as
+MQjYWnSULTmAFs7FAlKUFALohr1JoJvxBmBsLjmUjVkY6AJ+KUKEBqDszZf3
+w8r2+1cZRsKt6ZycO4aR9ve4ulyZtwdwku81WPmPjHBWYMhxtuCcWIt4y2rJ
+2IU9hrMO74G2kZeaFHuWYk/i7MV7Zq0mEsfZjunAWZBrxNpRHIazJis6Z1Ou
+KWNZVSzOvqwQnJW5B6ythQGcxRlxnN25Z6z15eBs0DvgLNERjD2+kquUtUp7
+NmebxgRrobEGzk4tI5y1GkOszSY9znI9E3D2a8zxWfFrr/5ytpxhehadQbl2
+3SF41p0Bdzae4bWW3sF09p6hc1afgTK2v2FxI0AGwY0DGfI6GnSA25iQ4Wwj
+Qwavjg8dqjZKZGDaWJFhKCPGBp2NGxliNnpkQOkY0uFjI0kGi40nGRr6dAeC
+jS0x+40wMXIew+Yx5tElpjvqxFBLo5rlKBUjHL1icqVaDWy0izmNgjGe0HGm
+MmrGMEbTmEEpW6EffSPio3IEurSu+I7iEdbRPaIZ6k8QJwMRu0lChKzyUJGa
+VESAJhsRl0pIhWNyElGYtITwPMTeeBjS8pCTh4Q8ZNsIGSLxEIaHGDwE2JgZ
+cG/kDHCDzoGSB3w8IOMBEw9oeMDBAwKeZvM0lad5G2nTGJ4G8BSap6A8heMp
+EE8heDbMszGeDfAkypMQz8I8C/C8iCeA58b78g+XOiS4
+  "], $CellContext`noughts$$ = {}, $CellContext`crosses$$ = {}, \
+$CellContext`player$$ = 1, $CellContext`gameover$$ = 
+  False, $CellContext`wins$$ = {{{1, 1}, {1, 2}, {1, 3}}, {{2, 1}, {2, 2}, {2,
+   3}}, {{3, 1}, {3, 2}, {3, 3}}, {{1, 1}, {2, 1}, {3, 1}}, {{1, 2}, {2, 2}, {
+  3, 2}}, {{1, 3}, {2, 3}, {3, 3}}, {{1, 1}, {2, 2}, {3, 3}}, {{1, 3}, {2, 
+  2}, {3, 1}}}, $CellContext`winText$$ = "", $CellContext`announceColor$$ = 
+  GrayLevel[1]}, 
+  TagBox[
+   DynamicBox[ToBoxes[
+     Graphics[{Black, 
+       AbsoluteThickness[15], 
+       Line[{{1.45, 0.5}, {1.55, 3.5}}], 
+       Line[{{2.45, 0.5}, {2.55, 3.5}}], 
+       Line[{{0.5, 1.5}, {3.5, 1.5}}], 
+       Line[{{0.5, 2.5}, {3.5, 2.5}}], 
+       Directive[FontSize -> 30], 
+       If[$CellContext`player$$ == 1, {Blue, 
+         Directive[FontSize -> 150, FontFamily -> "Comic Sans MS"], 
+         Text["O", {1, 5}]}, {Red, 
+         Directive[FontSize -> 150, FontFamily -> "Comic Sans MS"], 
+         Text["X", {1, 5}]}], $CellContext`announceColor$$, 
+       Text[$CellContext`winText$$, {2, 5}, {-1, 0}], Black, Thick, 
+       Line[{{1, 3.7}, {3, 3.7}, {3, 4.3}, {1, 4.3}, {1, 3.7}}], 
+       Text["New Game", {2, 4}], 
+       Directive[FontSize -> 150, FontFamily -> "Comic Sans MS"], Blue, 
+       Map[Text["O", {Part[#, 1] + 0.05 (Part[#, 2] - 2), 
+          Part[#, 2]}]& , $CellContext`noughts$$], Red, 
+       Map[Text["X", {Part[#, 1] + 0.05 (Part[#, 2] - 2), 
+          
+          Part[#, 2]}]& , $CellContext`crosses$$], \
+$CellContext`announceColor$$, 
+       AbsoluteThickness[10], 
+       If[$CellContext`gameover$$, 
+        Which[
+         TrueQ[$CellContext`announceColor$$ == Blue], 
+         Line[
+          Map[{Part[#, 1] + 0.05 (Part[#, 2] - 2), 
+            Part[#, 2]}& , 
+           
+           Select[$CellContext`wins$$, 
+            SubsetQ[$CellContext`noughts$$, #]& ], {2}]], 
+         TrueQ[$CellContext`announceColor$$ == Red], 
+         Line[
+          Map[{Part[#, 1] + 0.05 (Part[#, 2] - 2), 
+            Part[#, 2]}& , 
+           
+           Select[$CellContext`wins$$, 
+            SubsetQ[$CellContext`crosses$$, #]& ], {2}]], True, {}]]}, 
+      ImageSize -> 500, PlotRange -> {{0.4, 3.6}, {0.4, 5.6}}], StandardForm],
+    ImageSizeCache->{500., {404., 409.}}],
+   EventHandlerTag[{
+    "MouseClicked" :> (
+      Module[{$CellContext`x$ = 
+        Round[Part[#, 1] - 0.05 (Part[#, 2] - 2)], $CellContext`y$ = Round[
+          Part[#, 2]]}, 
+       If[$CellContext`y$ == 
+        4, $CellContext`noughts$$ = {}; $CellContext`crosses$$ = {}; \
+$CellContext`player$$ = 1; $CellContext`gameover$$ = 
+         False; $CellContext`winText$$ = ""; $CellContext`announceColor$$ = 
+         White, 
+        If[
+         And[
+          Not[$CellContext`gameover$$], 1 <= $CellContext`x$ <= 3, 
+          1 <= $CellContext`y$ <= 3, 
+          Not[
+           MemberQ[
+            
+            Union[$CellContext`noughts$$, $CellContext`crosses$$], \
+{$CellContext`x$, $CellContext`y$}]]], If[$CellContext`player$$ == 1, 
+           
+           AppendTo[$CellContext`noughts$$, {$CellContext`x$, \
+$CellContext`y$}], 
+           
+           AppendTo[$CellContext`crosses$$, {$CellContext`x$, \
+$CellContext`y$}]]; Which[
+           
+           AnyTrue[$CellContext`wins$$, 
+            SubsetQ[$CellContext`noughts$$, #]& ], $CellContext`gameover$$ = 
+            True; $CellContext`announceColor$$ = Blue; $CellContext`winText$$ = 
+            "Noughts win!", 
+           
+           AnyTrue[$CellContext`wins$$, 
+            SubsetQ[$CellContext`crosses$$, #]& ], $CellContext`gameover$$ = 
+            True; $CellContext`announceColor$$ = Red; $CellContext`winText$$ = 
+            "Crosses win!", 
+           Length[$CellContext`noughts$$] + Length[$CellContext`crosses$$] == 
+           9, $CellContext`gameover$$ = True; $CellContext`announceColor$$ = 
+            Black; $CellContext`winText$$ = "Game drawn", 
+           True, $CellContext`player$$ = 1 - $CellContext`player$$]]]]& )[
+       MousePosition["EventHandlerAutomatic"]], Method -> "Preemptive", 
+     PassEventsDown -> Automatic, PassEventsUp -> True}]],
+  DynamicModuleValues:>{}]], "Output",
+ CellChangeTimes->{
+  3.8152034268593016`*^9, {3.815203491659044*^9, 3.81520355506653*^9}, {
+   3.8152035911899624`*^9, 3.8152036413770885`*^9}, {3.815203711300085*^9, 
+   3.815203724723497*^9}, 3.8152038966873055`*^9, {3.8152041640621943`*^9, 
+   3.8152041794462614`*^9}, {3.8152042272027445`*^9, 3.815204237867773*^9}, {
+   3.815204279553247*^9, 3.8152043163172817`*^9}, {3.8152044199579954`*^9, 
+   3.8152044516695676`*^9}, {3.8152046652700343`*^9, 3.8152046985903425`*^9}, 
+   3.8152049272435966`*^9, {3.815204989958292*^9, 3.815205000292729*^9}, 
+   3.8152050700593452`*^9, {3.815205106649213*^9, 3.8152051294340005`*^9}, 
+   3.815205236074421*^9, 3.81520527415112*^9, 3.815205330733533*^9, 
+   3.8152054645528946`*^9, 3.815205534669032*^9, 3.8152055753459415`*^9, 
+   3.815205610197113*^9, 3.815205696519932*^9, 3.815205760228898*^9, 
+   3.8152059854078903`*^9, 3.815206018061982*^9, 3.8152060771497555`*^9, 
+   3.815206114683432*^9, 3.8152062194182863`*^9, {3.8152063583028417`*^9, 
+   3.8152064393462424`*^9}, 3.815206655464753*^9, 3.815206713192109*^9, 
+   3.8152069055846972`*^9, 3.8152069400790176`*^9, 3.8152070575501375`*^9, 
+   3.8152071448052983`*^9, 3.8152071752428303`*^9, 3.815207251844753*^9, {
+   3.8152072836638236`*^9, 3.8152073002475276`*^9}, 3.8152074695909376`*^9, 
+   3.815207570744214*^9},
+ CellLabel->"Out[202]=",ImageCache->GraphicsData["CompressedBitmap", "\<\
+eJztnVuTXUUVgDdz5swlmUxuRqPEcrSEikhgcmEyOU7CkJAQLxQRLYoyYiUG
+DkHFRECDRg1WWVoGkPFFvATCPVz09fDII4955OE8UOULf0CLx3Z39967V6/u
+vWb1SlMVqJkqT53svfrb3asv3+6eUe88/tjJBx4+/thDJ47P3PHI8dMnHzrx
+6MyhU4+UlzrXFMU1/y2KzrbNRfldFYX9j/75X/kf+1X67XX9Ofruu+++Y37K
+L3/TV7rvvffeO/XPhx9+WLxlop8rPzuLi4tFZ+vWrYX9mdAfnZmZGVMjVTxp
+iKdPn140P/Pz86tNxPvvv19FvNGwps2ddevWwbLmAfZnyty/fPlyUHJteePp
+aHRZ4SuMNq0BUbbksWPHkksWnQ8++KCKOh+lXLp0iUFxuYtTLl68GKG4PopT
+Tp48yaDgjGHKuXPnBBSXvTil/PdHRjly5AhJeeaZZxgU3Advv/22Rynz4N1/
+/PHHGRSXvTiljP/IKGUNSUrZQgYF90GZTY9SZtu7X/YGg+L6IE4pR8ZHRsHZ
+w5RyRggo5ewjKeXsZVBcH8Qpbl2GlHLVISnlqsWg4Ow5il7HpxNKuozpknq1
+fkscXdqCiDa2AfdhSZy7Ul1eSbwql16s7r9OUJAZibU9P0Wbm6KULSQpz6t0
+R7uSHOtKo1Md3V4yxdEUhe9oSJE7GlLkjqYofLvmp8gdDSlyR1MUvl3zU+SO
+hhS5oykK3675KXJHUxS+oykK39GQInc0pKQ5mioZWvdNcXSao2FJuaMvERS+
+XfNT5I62lIsq3dGuJMe60uhUR7eXTHE0ReE7GlLkjoYUuaMpCt+u+SlyR0OK
+3NEUhW/X/BS5oyFF7miKwrdrforc0RSF72iKwnc0pMgdDSlpjqZKhtZ9Qxyd
+5mhYUu7o1wgK3675KXJHW8oLKt3RriTHutLoVEe3l0xxNEXhOxpS5I6GFLmj
+KQrfrvkpckdDitzRFIVv1/wUuaMhRe5oisK3a36K3NEUhe9oisJ3NKTIHQ0p
+aY6mSobWfV0cneZoWFLu6FcJCt+u+SlyR1vKiyrd0a4kx7rS6FRHt5dMcTRF
+4TsaUuSOhhS5oykK3675KXJHQ4rc0RSFb9f8FLmjIUXuaIrCt2t+itzRFIXv
+aIrCdzSkyB0NKWmOpkqG1r0kjk5zNCwpd/QrBIVv1/wUuaMt5SWV7mhXkmNd
+aXSqo9tLpjjaUiZUtRrav7grnjV/oTcxMYFHT3X/vLm/efNm7345v6v7F8x9
+548ueIqb7+Wl4j+mpFuXVyJXIvmR5Ti3f2BaPKs/OmfOnPFG5OHDh6v75819
+bIlyBFf3L5j7bt50weySuwXO0TS3UCVDW7wmjk5zCywpd8vLBIVvhfwUuVss
+5WWV7hZXkmMLaXSqW9pLpriFovD3f5Ai3/9Binz/R1H4O7f8FPn+D1Lk+z+K
+wt+55afI93+QIt//URT+zi0/Rb7/oyj8/R9F4e//IEXuaEhJczRVMrTuq+Lo
+NEfDknJHv0RQ+HbNT5E72lJeUemOdiU51pVGpzq6vWSKoykK39GQInc0pMgd
+TVH4ds1PkTsaUuSOpih8u+anyB0NKXJHUxS+XfNT5I6mKHxHUxS+oyFF7mhI
+SXM0VTK07ivi6DRHw5JyR79IUPh2zU+RO9pSXlXpjnYlOdaVRqc6ur1kiqMp
+Ct/RkCJ3NKTIHU1R+HbNT5E7GlLkjqYofLvmp8gdDSlyR1MUvl3zU+SOpih8
+R1MUvqMhRe5oSElzNFUytO7L4ug0R8OScke/QFD4ds1PkTvaUl5T6Y52JTnW
+lUanOrq9ZIqjKQrf0ZAidzSkyB1NUfh2zU+ROxpS5I6mKHy75qfIHQ0pckdT
+FL5d81PkjqYofEdTFL6jIUXuaEhJczRVMrTuS+LoNEfDknJHXyQofLvmp8gd
+bSmXVLqjXUmOdaXRqY5uL5niaIrCdzSkyB0NKXJHUxS+XfNT5I62FPvXPeWo
+PGd+igv6ozM7O+uVOnr0aHX/vLl/1113efcXFhaq+8+a+26UXz1/wbQS+UmK
+xCP21KlT3ojcsmVLdf9Jc9+3WdE5e/Zsdf+v0RFrZ5fcLs9np8gdZSn6v1GU
+6ihXkmMdaXSqo9pLpjiKovAdBSlyR0GK3FEUhW+X/BS5oyBFvo+kKPwdYH6K
+fB8JKfJ9JEXh7wDzU+T7SIrC30dSFP4+ElLk+0hISdtHUiXDneEL4ui0fSQs
+Kd9HPkdQ+HbNT5E72lLeUOmOdiU51pVGpzq6vWSKoykK39GQInc0pMgdTVH4
+ds1PkTsaUuSOpih8u+anyB0NKXJHUxS+XfNT5I6mKHxHUxS+oyFF7mhISXM0
+VTK07kVxdJqjYUm5oy8QFL5d81PkjraUN1W6o11JjnWl0amObi+Z4miKwnc0
+pMgdDSlyR1MUvl3zU+SOhhS5oykK3675KXJHQ4rc0RSFb9f8FLmjKQrf0RSF
+72hIkTsaUtIcTZUMrfu8ODrN0bCk3NH/JCh8u+anyB1tKW+pdEe7khzrSqNT
+Hd1eMsXRFIXvaEiROxpS5I6mKHy75qfIHQ0pckdTFL5d81PkjoYUuaMpCt+u
++SlyR1MUvqMpCt/RkCJ3NKSkOZoqGVr3OXF0mqNhSbmj/0FQ+HbNT5E72lL+
+pdId7UpyrCuNTnV0e8kUR1MUvqMhRe5oSJE7mqLw7ZqfInc0pMgdTVH4ds1P
+kTsaUuSOpih8u+anyB1NUfiOpih8R0OK3NGQkuZoqmRo3Qvi6DRHw5JyR/+d
+oPDtmp8id7Sl/FulO9qV5FjXRRed8s7ExISOHTP/q4blDKn+Rk9POUjS9bYx
+9957L4gJW6C/Xvn/8/LV+e0+Va0IVQZU+TFvsuBW7u+BSNcLSucQzY4wUltF
+M+cM0zpG3/l+EKlnqIbMKTdfVyJXIlciVyJXIj9ZkXfrf48Ol3rGJL2loVpl
+rgz6lVzKS2OmjBoOlvo9HTdiXFPe6vX6g+HQ/g1/wyj6AzWqr3SVaq5pcLHR
+xJVXLalnIPpDg5YaUkc1jzJPmtBPMvd1s1Rds/5gpOK5K2Ne3cuKqG7Qvu4y
+rblHmLdJ2+Ymceaq/e8fdJo8FGPmafpJpjFFkCld7eaqg2nWepid8tpkXXOd
+nJrVcSzzrK6+C7qhkGVtdJl2fEeYtbrH66fb3tB3LHcEPXfCtllXUlVFVTGm
+UNqVqq6Dy/b62rr3+5Y4VY3Avn1i8LxV+mO8fpw3/ApO3jrL1P/uK8qba57J
+21iTN/1jws31VdUIqW80rQd96+fK1X0MjMzq+nS0z+wwLCdpUbV5WE8xM8u7
+VQf4NRtrRpCq14VOlSbYlrSxOmLbAypu219dD9ovHbvjNg9N3mw7cb3xiB61
+H2C5tPmvMP2B/VIW6IDrvaWl+r7NfxeO+DKJhVl/VruR7RJYR5oLdkXqwuTo
+tVm2Kox4MY0rvNZJs2tIE3Bm95fc7RG8buoKFmv01fGmjMbYr+VsHfHvlfHN
+N1uu6y+3Opnl1VWwTm701he6uB5p2Wynm5j7rih3IHMDWOuwdmZEra9jTF2q
+7/VCBW7VJJPxqWAETMVHicuunfJ2HI7CscnO2mSQNbAq/0CYM0tWXtK8zq7c
+4Hpotf7YBBcqmJr6X9VtmFsYZ0cZdD3Ia2gSt3LZd6Oefm0pJ8ZgMFSiXI7j
+XNp/116sLhbfFmbVrG2rFE6rCsYj8InJ6zjIq0uX7YMpmFk3n/3QKq/exKxG
+HX5H6jStb9xVvx2Omywn2ijIqS2SNaejMKMj/qobnePj1RWXIRRTlxpXjYHA
+KlB4a71pg90pwIE7tkx2bR2G+tVgUAqtHMtmFE/G8wt6LHENCNsqtVDHX7uq
+2dmS78BHY239AtLoe6lcG91CUYTRq7wagt1Za85Xx9fZYMWJ79k4lgpbKc12
+UDMz8joBv+NnIZiJupj/bqLrCd+n+n23bITzAI3s8spG/4llMcL8wc4t3M/p
+UdpmQLpdV5Rbb9UYjee17c1Zv1v6b43BvLPt9HYM9VVv5ZgMVo6N+MlmM66a
+d3nwyu76DO9BumA3MdR3RqurS8N63OoW2J2He7dRaEcC9kouHqzbCXu2MTxz
+Bv36vKF6emR04712xEHgBaIaW/4LfZXzyPkE8qHJO9hHmv3pJEwN6GAzZ8D6
+Yljj9t/NjhbvoMddvLmfMH5R9txuqqleJHv4xKVbP98WKvw51vjUO4PRq044
+OybxLDYzfso+bziEJzpmPbYjtmp/r+7vehcKVibzDFPP0SrMjN6m5lXm8LjA
+LfsuP7Nd2H6XV9eLYetbTgF79elTB2Wxzd4VGQzh8MQRvxODHQN4N7Onh9W5
+XV3ncS+zqj4ta0757EFP/S7fbJerXXo994vlWis7JVwKZn83yPN2PJ/NKAu9
+/zS/BmDMdND8CZ+/w1z2ztMG1clsUCtZHfBYC98fdqjI6t5pToFd79nBUI+E
+5ozlKcEa48bMRFCfndVo8HZ+wAgJefDsqNeZyeBpu9AKMlmNzfqs9c+Csefm
+GXzSXD0XB/pl3J3I1wfyqvgL61m6Wh+H33asRK5ErkSuRH48I/X/jp8qv87p
+f1b/q37xSP1TXiL/Kujy5cvvmJ9ClR/z+gv4uy8bqb9eLX8ftfKN/03/Da7+
+zZQyw0AVG/RH+cal7I+JNO8sxbdM5FKvjvyciewtwcg/mcivm8h+UUfORCL/
+YCIPmchBv468zj69p4Yu8vcm8nb09BtMZLP3NJG/M5H70dO3RZhPmMhF9PTt
+JtK98eqP35rIfShLuyLM35jIvaieuyPMsybya4jZi2T+VyayZyKHS3XkQuTp
+vzSRe9DTb41k6YyJnEdZui0S+QsTuRtFHohE/txEzqHIg5HIx0zkLSjSjqXm
+0KKYRrnZHGmxJe1CLf4MGmubLGmoevb+pyOkRw1pJyJtQpHXovufivTXI4a0
+A/UXjvwCav3GyPz4mSFtR3nYiOr0peh9l0f9cRqQ3DM3oMjrUOs2RPrulCHN
+Kn/WrEet24paj+870s2o9uvRXLlhmfv646eA5Fq3DrXuRjQK1kda97Ah3YRq
+j0k3IdK6SOsgydVpLSLNRkl+635iSNtQndaiyB0oT+sirfsxILk6TaORtyv6
+JH9kWtKN6JnTKA9zaJTg1uuPHwGSi5xGtcfrD34SJrnINShP8yjjsTo9ZEhf
+Ra1bg+YdXpFjdYIk1zpcJ2sBN++mI3U6CUiudVOoTgvL9Igj3YDysAb18t5o
+j/h1ehCQXB7WoMh90R7x6wRJ7pm4dbdGM+6P8T4guYxOodYtRuvkj3FIwhl3
+rVuMtt53iyV9JZpxV/vbonXy14IHoiScp/3xOvVbSQOU8SbyQLROfsbvTyC1
+zwFMcrXHfXcgmke/dTwSfp+Mte5EAql9DqSS2ucln3QQtQ6PklQSbp2fpx8m
+kHDr/FEASe3j6VC0dX6eUkjBqtNvJbXOu0PxJ3kZTyKhPPnj6bhqX59c3xyK
+3vczTpHcM+N5aifhvnGRh5YZJZiEn+kiWzLebyPhZ+JR0N4jmNTey/G+82fL
+MUhq7eV438VI8fcCnHHcI/54gqRg1Vhm3rWTgoyjPOG+bSfhNzEXeTBK8kem
+JeG3w/j6xCe1r66ppHZ3YLcsR2o3I5+E9wh4DB9IJGHvY5tz8rQtOgpcxvmk
+m1DfYQvtTyS1v/3FSbExjveU0+iZt0XHW4x0czTjrk74PXM5Et5NtL9Ft69P
+s6j2+M19H2p9++o7izKOdzj4lK6dhE9D8A5nL3pSu1u2x+vUPBPvpdp9tyNa
+Jxe5EM14zMH4/Anvc3so4+1vGPhMbC3quz3oSTHfQZLrm7Uoo/jksv39aRfK
+KD6j2I2eFHuLhqT2Exh8htH+xnoLygM+NcJPiu1eLWkO5QGTdkbr5I/ME4CE
+z7wcCZ8t4lXHkXaj1mGSnZd45Mb2UvOodZiEV+fYGcb9gORatwH1MnZ07KzH
+kvagPODfgOA3Wjxy9YfdUeNTIXwae320R2K7fHwqhM99v4xGQeyM1Z48LCAS
+PoueQaTYCbIl7UW9jM/Ht6D7sfPxBwHJ5WEz6rtNKI+bI+PJkrA7rkV1Wo36
+9vOR1tkzsVsR6Y7IqmFP9BZR5MFIO+15JP5N1P7ImmZPU/FZy2Ik0p4F3476
+a1/k6fb8+SBq+0KkRfb0/A709D2RcWlP7A+jnpmL1NP+5uIbaNztjGTe/rbk
+myifs5Gn29/13Ikib4ww7e+sjqCnXx9pu/2N2d2I+cVI5K9N5D2I+dlIPZ8w
+kUdRH8XW6D+aSP3tavlN8Mq35b4V1/wfMSq6dg==\
+\>", "ImageResolution" -> \
+72.],ExpressionUUID->"9b6dbb83-728e-4fcd-a722-8e61a876ade5"]
+}, {2}]]
+}, Open  ]]
+},
+WindowSize->{1371, 831},
+WindowMargins->{{158, Automatic}, {Automatic, 52}},
+FrontEndVersion->"12.1 for Microsoft Windows (64-bit) (June 19, 2020)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"bbf89074-8ce8-4996-84ee-c2cb68d63286"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 153, 3, 67, "Section",ExpressionUUID->"8858afb3-a843-45a6-8d2f-2d08260278ec"],
+Cell[CellGroupData[{
+Cell[758, 29, 14442, 364, 485, "Input",ExpressionUUID->"d010ee82-c27e-4321-9d05-f6d0ad5f84d4"],
+Cell[15203, 395, 13547, 244, 830, 5681, 117, "CachedBoxData", "BoxData", "Output",ExpressionUUID->"9b6dbb83-728e-4fcd-a722-8e61a876ade5"]
+}, {2}]]
+}, Open  ]]
+}
+]
+*)
+

@@ -1,0 +1,455 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     18539,        445]
+NotebookOptionsPosition[     17930,        425]
+NotebookOutlinePosition[     18330,        441]
+CellTagsIndexPosition[     18287,        438]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Game", "Section",
+ CellChangeTimes->{{3.8151235692855844`*^9, 
+  3.8151235697245054`*^9}},ExpressionUUID->"8858afb3-a843-45a6-8d2f-\
+2d08260278ec"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DynamicModule", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"universe", "=", 
+      RowBox[{"Tuples", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Range", "[", "7", "]"}], ",", 
+         RowBox[{"Range", "[", "6", "]"}]}], "}"}], "]"}]}], ",", 
+     RowBox[{"red", "=", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"yellow", "=", 
+      RowBox[{"{", "}"}]}], ",", 
+     RowBox[{"player", "=", "1"}], ",", 
+     RowBox[{"heights", "=", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{"0", ",", "7"}], "]"}]}], ",", 
+     RowBox[{"wins", "=", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"Table", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"x", ",", "y"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"x", ",", "x0", ",", 
+                RowBox[{"x0", "+", "3"}]}], "}"}]}], "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"x0", ",", "1", ",", "4"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"y", ",", "1", ",", "6"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"Table", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"x", ",", "y"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"y", ",", "y0", ",", 
+                RowBox[{"y0", "+", "3"}]}], "}"}]}], "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"y0", ",", "1", ",", "3"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"x", ",", "1", ",", "7"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"Table", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"dx", "+", "x0"}], ",", 
+                RowBox[{"dx", "+", "y0"}]}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"dx", ",", "0", ",", "3"}], "}"}]}], "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"y0", ",", "1", ",", "3"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"x0", ",", "1", ",", "4"}], "}"}]}], "]"}], ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"Table", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"dx", "+", "x0"}], ",", 
+                RowBox[{
+                 RowBox[{"-", "dx"}], "+", "y0"}]}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"dx", ",", "0", ",", "3"}], "}"}]}], "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"y0", ",", "4", ",", "6"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"x0", ",", "1", ",", "4"}], "}"}]}], "]"}]}], "}"}], ",",
+         "2"}], "]"}]}], ",", 
+     RowBox[{"announceColor", "=", "Blue"}], ",", 
+     RowBox[{"gameover", "=", "False"}], ",", 
+     RowBox[{"winText", "=", "\"\<\>\""}]}], "}"}], ",", 
+   RowBox[{"ClickPane", "[", "\n", 
+    RowBox[{
+     RowBox[{"Dynamic", "[", 
+      RowBox[{
+       RowBox[{"Graphics", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"Blue", ",", 
+           RowBox[{"Rectangle", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"0", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"8", ",", "9"}], "}"}]}], "]"}], ",", "White", ",", 
+           RowBox[{"Map", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Disk", "[", 
+               RowBox[{"#", ",", "0.4"}], "]"}], "&"}], ",", 
+             RowBox[{"Complement", "[", 
+              RowBox[{"universe", ",", 
+               RowBox[{"Union", "[", 
+                RowBox[{"red", ",", "yellow"}], "]"}]}], "]"}]}], "]"}], ",", 
+           "Red", ",", 
+           RowBox[{"Map", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Disk", "[", 
+               RowBox[{"#", ",", "0.4"}], "]"}], "&"}], ",", "red"}], "]"}], 
+           ",", "Yellow", ",", 
+           RowBox[{"Map", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Disk", "[", 
+               RowBox[{"#", ",", "0.4"}], "]"}], "&"}], ",", "yellow"}], 
+            "]"}], ",", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"player", "\[Equal]", "1"}], ",", "Red", ",", "Yellow"}],
+             "]"}], ",", 
+           RowBox[{"Disk", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "8"}], "}"}], ",", "0.4"}], "]"}], ",", 
+           RowBox[{"Directive", "[", 
+            RowBox[{"FontSize", "\[Rule]", "30"}], "]"}], ",", 
+           "announceColor", ",", 
+           RowBox[{"Text", "[", 
+            RowBox[{"winText", ",", 
+             RowBox[{"{", 
+              RowBox[{"2", ",", "8"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "1"}], ",", "0"}], "}"}]}], "]"}], ",", 
+           "LightGray", ",", "Thick", ",", 
+           RowBox[{"Line", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"5.5", ",", "7.5"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"7.5", ",", "7.5"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"7.5", ",", "8.5"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"5.5", ",", "8.5"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"5.5", ",", "7.5"}], "}"}]}], "}"}], "]"}], ",", 
+           RowBox[{"Text", "[", 
+            RowBox[{"\"\<New Game\>\"", ",", 
+             RowBox[{"{", 
+              RowBox[{"6.5", ",", "8"}], "}"}]}], "]"}], ",", "Black", ",", 
+           RowBox[{"AbsoluteThickness", "[", "10", "]"}], ",", 
+           RowBox[{"If", "[", 
+            RowBox[{"gameover", ",", 
+             RowBox[{"Which", "[", 
+              RowBox[{
+               RowBox[{"TrueQ", "[", 
+                RowBox[{"announceColor", "\[Equal]", "Red"}], "]"}], ",", 
+               RowBox[{"Line", "[", 
+                RowBox[{"Select", "[", 
+                 RowBox[{"wins", ",", 
+                  RowBox[{
+                   RowBox[{"SubsetQ", "[", 
+                    RowBox[{"red", ",", "#"}], "]"}], "&"}]}], "]"}], "]"}], 
+               ",", 
+               RowBox[{"TrueQ", "[", 
+                RowBox[{"announceColor", "\[Equal]", "Yellow"}], "]"}], ",", 
+               RowBox[{"Line", "[", 
+                RowBox[{"Select", "[", 
+                 RowBox[{"wins", ",", 
+                  RowBox[{
+                   RowBox[{"SubsetQ", "[", 
+                    RowBox[{"yellow", ",", "#"}], "]"}], "&"}]}], "]"}], 
+                "]"}], ",", "True", ",", 
+               RowBox[{"{", "}"}]}], "]"}]}], "]"}]}], "}"}], ",", 
+         RowBox[{"ImageSize", "\[Rule]", "700"}]}], "]"}], ",", 
+       RowBox[{"SaveDefinitions", "\[Rule]", "True"}]}], "]"}], ",", 
+     RowBox[{
+      RowBox[{"Module", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"x", "=", 
+           RowBox[{"Round", "[", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "]"}]}], ",", 
+          RowBox[{"y", "=", 
+           RowBox[{"Round", "[", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "2", "]"}], "]"}], "]"}]}]}], "}"}], ",", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"y", "\[Equal]", "8"}], "&&", 
+           RowBox[{"(", 
+            RowBox[{"6", "\[LessEqual]", "x", "\[LessEqual]", "7"}], ")"}]}], 
+          ",", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"red", "=", 
+             RowBox[{"{", "}"}]}], ";", 
+            RowBox[{"yellow", "=", 
+             RowBox[{"{", "}"}]}], ";", 
+            RowBox[{"player", "=", "1"}], ";", 
+            RowBox[{"heights", "=", 
+             RowBox[{"ConstantArray", "[", 
+              RowBox[{"0", ",", "7"}], "]"}]}], ";", 
+            RowBox[{"announceColor", "=", "Blue"}], ";", 
+            RowBox[{"gameover", "=", "False"}], ";", 
+            RowBox[{"winText", "=", "\"\<\>\""}]}], ")"}], ",", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"Not", "[", "gameover", "]"}], "&&", 
+             RowBox[{
+              RowBox[{"heights", "[", 
+               RowBox[{"[", "x", "]"}], "]"}], "<", "6"}]}], ",", 
+            RowBox[{
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{"player", "\[Equal]", "1"}], ",", 
+               RowBox[{"AppendTo", "[", 
+                RowBox[{"red", ",", 
+                 RowBox[{"{", 
+                  RowBox[{"x", ",", 
+                   RowBox[{
+                    RowBox[{"heights", "[", 
+                    RowBox[{"[", "x", "]"}], "]"}], "+", "1"}]}], "}"}]}], 
+                "]"}], ",", 
+               RowBox[{"AppendTo", "[", 
+                RowBox[{"yellow", ",", 
+                 RowBox[{"{", 
+                  RowBox[{"x", ",", 
+                   RowBox[{
+                    RowBox[{"heights", "[", 
+                    RowBox[{"[", "x", "]"}], "]"}], "+", "1"}]}], "}"}]}], 
+                "]"}]}], "]"}], ";", 
+             RowBox[{
+              RowBox[{"heights", "[", 
+               RowBox[{"[", "x", "]"}], "]"}], "++"}], ";", 
+             RowBox[{"Which", "[", 
+              RowBox[{
+               RowBox[{"AnyTrue", "[", 
+                RowBox[{"wins", ",", 
+                 RowBox[{
+                  RowBox[{"SubsetQ", "[", 
+                   RowBox[{"red", ",", "#"}], "]"}], "&"}]}], "]"}], ",", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"gameover", "=", "True"}], ";", 
+                 RowBox[{"announceColor", "=", "Red"}], ";", 
+                 RowBox[{"winText", "=", "\"\<Red wins!\>\""}]}], ")"}], ",", 
+               RowBox[{"AnyTrue", "[", 
+                RowBox[{"wins", ",", 
+                 RowBox[{
+                  RowBox[{"SubsetQ", "[", 
+                   RowBox[{"yellow", ",", "#"}], "]"}], "&"}]}], "]"}], ",", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"gameover", "=", "True"}], ";", 
+                 RowBox[{"announceColor", "=", "Yellow"}], ";", 
+                 RowBox[{"winText", "=", "\"\<Yellow wins!\>\""}]}], ")"}], 
+               ",", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"Length", "[", "red", "]"}], "+", 
+                 RowBox[{"Length", "[", "yellow", "]"}]}], "\[Equal]", "42"}],
+                ",", 
+               RowBox[{"(", 
+                RowBox[{
+                 RowBox[{"gameover", "=", "True"}], ";", 
+                 RowBox[{"announceColor", "=", "White"}], ";", 
+                 RowBox[{"winText", "=", "\"\<Game drawn\>\""}]}], ")"}], ",",
+                "True", ",", 
+               RowBox[{"player", "=", 
+                RowBox[{"1", "-", "player"}]}]}], "]"}]}]}], "]"}]}], "]"}]}],
+        "]"}], "&"}]}], "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.815122255708194*^9, 3.815122281719983*^9}, {
+   3.8151223502630653`*^9, 3.8151223616959767`*^9}, {3.815122685939905*^9, 
+   3.815122716062766*^9}, 3.8151227566772203`*^9, {3.815122831509898*^9, 
+   3.815122886138896*^9}, {3.81512292084969*^9, 3.8151229634333715`*^9}, {
+   3.8151229989650745`*^9, 3.815123066167102*^9}, {3.815123371121081*^9, 
+   3.815123381854305*^9}, 3.8151235357450404`*^9, {3.815123722014512*^9, 
+   3.815123779591261*^9}, 3.8151238334214816`*^9, {3.8151294460238976`*^9, 
+   3.8151294474895363`*^9}, {3.81513479601291*^9, 3.8151348363186703`*^9}, {
+   3.8151348674724865`*^9, 3.8151350267753716`*^9}, {3.815135097797995*^9, 
+   3.815135140938945*^9}, {3.815135212377545*^9, 3.8151353105705037`*^9}, {
+   3.8151353431817813`*^9, 3.8151355235771065`*^9}, {3.815135635003948*^9, 
+   3.8151357493682404`*^9}, {3.8151402980647626`*^9, 
+   3.8151403139709344`*^9}, {3.81514035575589*^9, 3.8151404385601263`*^9}, {
+   3.8151404893903027`*^9, 3.815140517146209*^9}, {3.8151406026864758`*^9, 
+   3.8151407772255707`*^9}, {3.8151408372257757`*^9, 
+   3.8151408374303913`*^9}, {3.8151409001487846`*^9, 
+   3.8151411221788435`*^9}, {3.8151411756528287`*^9, 
+   3.8151412914472523`*^9}, {3.8151413431248274`*^9, 3.815141409840929*^9}, {
+   3.8151415041090355`*^9, 3.8151415498551626`*^9}, {3.815141754955431*^9, 
+   3.8151417553666515`*^9}, {3.815142043278196*^9, 3.8151421686106944`*^9}, {
+   3.8151422379281073`*^9, 3.8151425164086556`*^9}, {3.815142548149349*^9, 
+   3.815142693189966*^9}, {3.8151427380495777`*^9, 3.8151428251548305`*^9}, {
+   3.815142879348853*^9, 3.8151430433365555`*^9}, 3.8152012469436855`*^9, {
+   3.8152012889956913`*^9, 3.81520148731258*^9}, {3.815201932058115*^9, 
+   3.8152019547128754`*^9}},
+ CellLabel->
+  "In[108]:=",ExpressionUUID->"af9f089e-6a16-4c34-87f5-fb4ef77209f8"],
+
+Cell[BoxData[
+ DynamicModuleBox[{$CellContext`universe$$ = {{1, 1}, {1, 2}, {1, 3}, {1, 
+  4}, {1, 5}, {1, 6}, {2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5}, {2, 6}, {3, 
+  1}, {3, 2}, {3, 3}, {3, 4}, {3, 5}, {3, 6}, {4, 1}, {4, 2}, {4, 3}, {4, 
+  4}, {4, 5}, {4, 6}, {5, 1}, {5, 2}, {5, 3}, {5, 4}, {5, 5}, {5, 6}, {6, 
+  1}, {6, 2}, {6, 3}, {6, 4}, {6, 5}, {6, 6}, {7, 1}, {7, 2}, {7, 3}, {7, 
+  4}, {7, 5}, {7, 
+  6}}, $CellContext`red$$ = {}, $CellContext`yellow$$ = {}, \
+$CellContext`player$$ = 1, $CellContext`heights$$ = {0, 0, 0, 0, 0, 0, 
+  0}, $CellContext`wins$$ = CompressedData["
+1:eJwtkMkRwzAMA80DYB0pJg2khDSQ/n+BBD40GgvLY/36/j7fep7nrdM6qROR
+UdG6MitbH1lVrafs6u5AotAIJotN0wjTSNMo02jTgGnQNMM00zTLNNs0YZo0
+PWF60vSU6WnTA9PDWIFcgVqBXgGsAFdgYnJqerWx2lhtrDZWG6sNVw1Wn6vP
+1efqc/W5+nTV2fP8qr4/+Iw5K5+yswLvPjfGXjBFmDpz/bAx96Ip9W8lqTat
+JIW3ktRzqz4nNOYmancTld1ETVrzU0Y30TI30dCbqDk0v/7TGwoL
+  "], $CellContext`announceColor$$ = RGBColor[
+  0, 0, 1], $CellContext`gameover$$ = False, $CellContext`winText$$ = ""}, 
+  TagBox[
+   DynamicBox[ToBoxes[
+     Graphics[{Blue, 
+       Rectangle[{0, 0}, {8, 9}], White, 
+       Map[Disk[#, 0.4]& , 
+        Complement[$CellContext`universe$$, 
+         Union[$CellContext`red$$, $CellContext`yellow$$]]], Red, 
+       Map[Disk[#, 0.4]& , $CellContext`red$$], Yellow, 
+       Map[Disk[#, 0.4]& , $CellContext`yellow$$], 
+       If[$CellContext`player$$ == 1, Red, Yellow], 
+       Disk[{1, 8}, 0.4], 
+       Directive[FontSize -> 30], $CellContext`announceColor$$, 
+       Text[$CellContext`winText$$, {2, 8}, {-1, 0}], LightGray, Thick, 
+       Line[{{5.5, 7.5}, {7.5, 7.5}, {7.5, 8.5}, {5.5, 8.5}, {5.5, 7.5}}], 
+       Text["New Game", {6.5, 8}], Black, 
+       AbsoluteThickness[10], 
+       If[$CellContext`gameover$$, 
+        Which[
+         TrueQ[$CellContext`announceColor$$ == Red], 
+         Line[
+          Select[$CellContext`wins$$, SubsetQ[$CellContext`red$$, #]& ]], 
+         TrueQ[$CellContext`announceColor$$ == Yellow], 
+         Line[
+          Select[$CellContext`wins$$, SubsetQ[$CellContext`yellow$$, #]& ]], 
+         True, {}]]}, ImageSize -> 700], StandardForm],
+    ImageSizeCache->{700., {389., 394.}}],
+   EventHandlerTag[{"MouseClicked" :> (Module[{$CellContext`x$ = Round[
+          Part[#, 1]], $CellContext`y$ = Round[
+          Part[#, 2]]}, 
+       If[
+        And[$CellContext`y$ == 8, 6 <= $CellContext`x$ <= 
+         7], $CellContext`red$$ = {}; $CellContext`yellow$$ = {}; \
+$CellContext`player$$ = 1; $CellContext`heights$$ = 
+         ConstantArray[0, 7]; $CellContext`announceColor$$ = 
+         Blue; $CellContext`gameover$$ = False; $CellContext`winText$$ = "", 
+        If[
+         And[
+          Not[$CellContext`gameover$$], 
+          Part[$CellContext`heights$$, $CellContext`x$] < 6], 
+         If[$CellContext`player$$ == 1, 
+           
+           AppendTo[$CellContext`red$$, {$CellContext`x$, 
+             Part[$CellContext`heights$$, $CellContext`x$] + 1}], 
+           
+           AppendTo[$CellContext`yellow$$, {$CellContext`x$, 
+             Part[$CellContext`heights$$, $CellContext`x$] + 1}]]; Increment[
+           Part[$CellContext`heights$$, $CellContext`x$]]; Which[
+           
+           AnyTrue[$CellContext`wins$$, 
+            SubsetQ[$CellContext`red$$, #]& ], $CellContext`gameover$$ = 
+            True; $CellContext`announceColor$$ = Red; $CellContext`winText$$ = 
+            "Red wins!", 
+           
+           AnyTrue[$CellContext`wins$$, 
+            SubsetQ[$CellContext`yellow$$, #]& ], $CellContext`gameover$$ = 
+            True; $CellContext`announceColor$$ = 
+            Yellow; $CellContext`winText$$ = "Yellow wins!", 
+           Length[$CellContext`red$$] + Length[$CellContext`yellow$$] == 
+           42, $CellContext`gameover$$ = True; $CellContext`announceColor$$ = 
+            White; $CellContext`winText$$ = "Game drawn", 
+           True, $CellContext`player$$ = 1 - $CellContext`player$$]]]]& )[
+       MousePosition["EventHandlerAutomatic"]], Method -> "Preemptive", 
+     PassEventsDown -> Automatic, PassEventsUp -> True}]],
+  DynamicModuleValues:>{}]], "Output",
+ CellChangeTimes->{3.815201969196723*^9},
+ CellLabel->
+  "Out[108]=",ExpressionUUID->"2d234bef-d4b5-40b5-9e6f-ad851d6efaaa"]
+}, {2}]]
+}, Open  ]]
+},
+WindowSize->{1362, 831},
+WindowMargins->{{158, Automatic}, {Automatic, 52}},
+FrontEndVersion->"12.1 for Microsoft Windows (64-bit) (June 19, 2020)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"cb350663-b762-47de-a0a1-d4f682f71d7f"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 153, 3, 67, "Section",ExpressionUUID->"8858afb3-a843-45a6-8d2f-2d08260278ec"],
+Cell[CellGroupData[{
+Cell[758, 29, 12917, 307, 447, "Input",ExpressionUUID->"af9f089e-6a16-4c34-87f5-fb4ef77209f8"],
+Cell[13678, 338, 4227, 83, 800, "Output",ExpressionUUID->"2d234bef-d4b5-40b5-9e6f-ad851d6efaaa"]
+}, {2}]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
