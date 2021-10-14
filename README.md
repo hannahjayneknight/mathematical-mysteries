@@ -1,6 +1,6 @@
 # Mathematical Mysteries
 
-Module choice for Imperial i-explore module of year 3 Design Engineering. 5 ECTS / FHEQ level 6. Led by Philip Ramsden. 
+Module choice for Imperial i-explore module of year 3 Design Engineering. 5 ECTS / FHEQ level 6. Led by Dr Philip Ramsden. 
 
 ## Course description
 
